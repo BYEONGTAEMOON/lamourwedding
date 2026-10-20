@@ -22,12 +22,15 @@ export default function ReservationsPage({ searchParams }: { searchParams: Searc
 }
 
 async function Results({ searchParams }: { searchParams: SearchParams }) {
-    await requireAdmin();
     const { q = '', status = '', region = '', page: pageParam } = await searchParams;
 
     const page = Math.max(1, Number(pageParam) || 1);
     const from = (page - 1) * PAGE_SIZE;
-    const { rows, count } = await listReservations({ q, status, region }, from, from + PAGE_SIZE - 1);
+    // Session check and query run together; nothing renders until requireAdmin() passes.
+    const [, { rows, count }] = await Promise.all([
+        requireAdmin(),
+        listReservations({ q, status, region }, from, from + PAGE_SIZE - 1),
+    ]);
     const pages = Math.max(1, Math.ceil(count / PAGE_SIZE));
 
     const href = (p: number) => {

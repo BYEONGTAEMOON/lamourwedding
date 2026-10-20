@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { connection } from 'next/server';
 import { Suspense } from 'react';
 import { requireAdmin } from '@/lib/auth';
 import { getSiteContentFresh } from '@/lib/content';
@@ -36,20 +37,26 @@ function Stat({ label, value, href }: { label: string; value: string; href: stri
 }
 
 async function Dashboard() {
-    await requireAdmin();
+    // "Today" depends on the clock, so this must render per request, never while prerendering.
+    await connection();
     const since = kstTodayStart();
-    const [total, fresh, today, { rows: recent }, regions] = await Promise.all([
+    // Every query starts at once (including the session check) so the page waits
+    // for one round trip instead of a chain of them.
+    const [, total, fresh, today, { rows: recent }, regions] = await Promise.all([
+        requireAdmin(),
         countReservations({}),
         countReservations({ status: 'new' }),
         countReservations({ since }),
         listReservations({}, 0, 4),
         Promise.all(
-            REGIONS.map(async (r) => ({
-                ...r,
-                seats: (await getSiteContentFresh(r.id)).seats,
-                today: await countReservations({ region: r.id, since }),
-                total: await countReservations({ region: r.id }),
-            })),
+            REGIONS.map(async (r) => {
+                const [content, regionToday, regionTotal] = await Promise.all([
+                    getSiteContentFresh(r.id),
+                    countReservations({ region: r.id, since }),
+                    countReservations({ region: r.id }),
+                ]);
+                return { ...r, seats: content.seats, today: regionToday, total: regionTotal };
+            }),
         ),
     ]);
 

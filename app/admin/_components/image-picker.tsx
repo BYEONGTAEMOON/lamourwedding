@@ -95,7 +95,7 @@ export function ImagePicker({
                 aria-label="이미지 변경"
             >
                 {src ? (
-                    <Image src={src} alt={alt} fill sizes={sizes} className={imageClassName} />
+                    <Image src={src} alt={alt} fill sizes={sizes} unoptimized className={imageClassName} />
                 ) : (
                     (empty ?? <span className="text-xs text-muted">이미지 없음</span>)
                 )}
