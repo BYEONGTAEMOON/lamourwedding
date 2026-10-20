@@ -1,8 +1,9 @@
 'use server';
 
 import { getSiteContent } from '@/lib/content';
+import { clientIp, isLimited, recordAttempt } from '@/lib/rate-limit';
 import { isRegion } from '@/lib/regions';
-import { insertReservation } from '@/lib/reservations-db';
+import { hasRecentReservation, insertReservation } from '@/lib/reservations-db';
 
 export type ReservationInput = {
     region: string;
@@ -13,12 +14,20 @@ export type ReservationInput = {
     agreePrivacy: boolean;
     agreeMarketing: boolean;
     website?: string; // honeypot: real visitors never fill this hidden field
+    elapsedMs?: number; // time between the form appearing and submit
 };
+
+// Bots post the form instantly; people need a few seconds to fill it in.
+const MIN_FILL_MS = 2000;
+// Per IP. Generous because mobile carriers put many visitors behind one address.
+const RESERVATION_RULE = { limit: 10, windowMs: 10 * 60_000 };
+const DUPLICATE_WINDOW_MS = 24 * 60 * 60_000;
 
 export async function createReservation(
     input: ReservationInput,
 ): Promise<{ ok: true } | { ok: false; error: string }> {
-    if (input.website) return { ok: true };
+    // Pretend success so bots don't learn what tripped them.
+    if (input.website || !(Number(input.elapsedMs) >= MIN_FILL_MS)) return { ok: true };
 
     const name = String(input.name ?? '').trim().slice(0, 40);
     const digits = String(input.phone ?? '').replace(/\D/g, '');
@@ -41,6 +50,18 @@ export async function createReservation(
             : `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
 
     try {
+        const ip = await clientIp();
+        if (await isLimited('reservation', ip, RESERVATION_RULE)) {
+            return { ok: false, error: '신청이 너무 많이 접수되었습니다. 잠시 후 다시 시도해 주세요.' };
+        }
+        const since = new Date(Date.now() - DUPLICATE_WINDOW_MS).toISOString();
+        if (await hasRecentReservation(phone, input.region, since)) {
+            return {
+                ok: false,
+                error: '이미 사전예약이 접수된 번호입니다. 일정 변경은 담당 플래너가 연락드릴 때 말씀해 주세요.',
+            };
+        }
+        await recordAttempt('reservation', ip, RESERVATION_RULE);
         await insertReservation({
             region: input.region,
             name,

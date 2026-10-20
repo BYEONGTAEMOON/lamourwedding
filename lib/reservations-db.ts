@@ -94,6 +94,21 @@ export async function allReservations(filter: ReservationFilter) {
     }
 }
 
+export async function hasRecentReservation(phone: string, region: string, since: string) {
+    if (!isSupabaseConfigured) {
+        const { rows } = await readJson(RESERVATIONS_FILE, EMPTY);
+        return rows.some((r) => r.phone === phone && (r.region ?? 'daegu') === region && r.created_at >= since);
+    }
+    const { count, error } = await supabaseAdmin()
+        .from('reservations')
+        .select('id', { count: 'exact', head: true })
+        .eq('phone', phone)
+        .eq('region', region)
+        .gte('created_at', since);
+    if (error) throw new Error(error.message);
+    return (count ?? 0) > 0;
+}
+
 export async function insertReservation(input: NewReservation) {
     if (!isSupabaseConfigured) {
         await updateJson(RESERVATIONS_FILE, EMPTY, ({ nextId, rows }) => ({

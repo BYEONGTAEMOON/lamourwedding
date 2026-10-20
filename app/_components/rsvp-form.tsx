@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { createReservation } from "../actions";
 import { useReservation } from "./reservation-context";
 
@@ -82,6 +82,11 @@ export function RsvpForm({
   const [agree, setAgree] = useState(false);
   const [marketing, setMarketing] = useState(false);
   const [error, setError] = useState("");
+  // Sent with the reservation so the server can drop instant bot submissions.
+  const shownAt = useRef(0);
+  useEffect(() => {
+    shownAt.current = performance.now();
+  }, []);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -104,6 +109,7 @@ export function RsvpForm({
         agreePrivacy: agree,
         agreeMarketing: marketing,
         website,
+        elapsedMs: Math.round(performance.now() - shownAt.current),
       });
       if (res.ok) setSubmitted(true);
       else setError(res.error);
