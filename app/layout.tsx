@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 import { Noto_Serif_KR, Playfair_Display } from 'next/font/google';
 import './globals.css';
@@ -33,7 +34,10 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
                     href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
                 />
             </head>
-            <body>{children}</body>
+            <body>
+                {children}
+                <Analytics />
+            </body>
         </html>
     );
 }
