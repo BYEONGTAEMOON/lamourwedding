@@ -29,12 +29,13 @@ export async function createReservation(
     // Pretend success so bots don't learn what tripped them.
     if (input.website || !(Number(input.elapsedMs) >= MIN_FILL_MS)) return { ok: true };
 
-    const name = String(input.name ?? '').trim().slice(0, 40);
+    const name = String(input.name ?? '').trim();
     const digits = String(input.phone ?? '').replace(/\D/g, '');
     if (!isRegion(input.region)) return { ok: false, error: '잘못된 요청입니다.' };
     const { form } = await getSiteContent(input.region);
 
     if (!name) return { ok: false, error: '이름을 입력해 주세요.' };
+    if (!/^[가-힣]{2,5}$/.test(name)) return { ok: false, error: '이름은 한글 2~5자로 입력해 주세요.' };
     if (digits.length < 10 || digits.length > 11)
         return { ok: false, error: '휴대폰 번호를 정확히 입력해 주세요.' };
     if (!form.weddingMonths.includes(input.weddingMonth))

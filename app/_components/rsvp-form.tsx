@@ -12,6 +12,11 @@ const formatPhone = (v: string) => {
   return `${d.slice(0, 3)}-${d.slice(3, 7)}-${d.slice(7)}`;
 };
 
+// Names are Korean only, up to 5 characters. Jamo (ㄱ, ㅏ…) stay allowed while typing
+// so an in-progress syllable isn't cut off; submit requires complete syllables.
+const NAME_MAX = 5;
+const cleanName = (v: string) => v.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣ]/g, "").slice(0, NAME_MAX);
+
 const inputClass =
   "border-0 border-b border-taupe bg-transparent px-0.5 py-2.5 text-base text-ink outline-none";
 
@@ -143,6 +148,7 @@ export function RsvpForm({
     e.preventDefault();
     let err = "";
     if (!name.trim()) err = "이름을 입력해 주세요.";
+    else if (!/^[가-힣]{2,5}$/.test(name)) err = "이름은 한글 2~5자로 입력해 주세요.";
     else if (phone.replace(/\D/g, "").length < 10) err = "휴대폰 번호를 정확히 입력해 주세요.";
     else if (!month) err = "결혼 예정월을 선택해 주세요.";
     else if (!day) err = "방문 희망일을 선택해 주세요.";
@@ -208,9 +214,12 @@ export function RsvpForm({
             autoComplete="name"
             value={name}
             onChange={(e) => {
-              setName(e.target.value);
+              // Rewriting the value mid-composition breaks the Korean IME; clean once it ends.
+              const v = e.target.value;
+              setName((e.nativeEvent as InputEvent).isComposing ? v : cleanName(v));
               setError("");
             }}
+            onCompositionEnd={(e) => setName(cleanName(e.currentTarget.value))}
             placeholder="홍길동"
             className={inputClass}
           />
