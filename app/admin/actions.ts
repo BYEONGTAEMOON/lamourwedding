@@ -7,6 +7,7 @@ import { redirect } from 'next/navigation';
 import { requireAdmin } from '@/lib/auth';
 import { CONTENT_TAG, saveSection } from '@/lib/content';
 import { checkAdminPassword, MIN_PASSWORD_LENGTH, setAdminPassword } from '@/lib/admin-password';
+import { clearAttempts, clientIp, isLimited, recordAttempt } from '@/lib/rate-limit';
 import { createSessionToken, SESSION_COOKIE } from '@/lib/session';
 import { isRegion } from '@/lib/regions';
 import { sanitize, SECTION_KEYS, type SectionKey, type SiteContent } from '@/lib/site-content';
@@ -37,10 +38,21 @@ async function startSession() {
     });
 }
 
+// Failed logins per IP before that IP has to wait out the window.
+const LOGIN_RULE = { limit: 5, windowMs: 15 * 60_000 };
+
 export async function login(_prev: string | null, formData: FormData): Promise<string | null> {
     const password = String(formData.get('password') ?? '');
     try {
-        if (!(await checkAdminPassword(password))) return '비밀번호가 올바르지 않습니다.';
+        const ip = await clientIp();
+        if (await isLimited('login', ip, LOGIN_RULE)) {
+            return '로그인 시도가 너무 많습니다. 15분 후에 다시 시도해 주세요.';
+        }
+        if (!(await checkAdminPassword(password))) {
+            await recordAttempt('login', ip, LOGIN_RULE);
+            return '비밀번호가 올바르지 않습니다.';
+        }
+        await clearAttempts('login', ip);
     } catch (e) {
         return fail(e).error;
     }

@@ -45,4 +45,6 @@ next-env.d.ts
 /data/reservations.json
 # admin password hash
 /data/admin-auth.json
+# rate-limit counters (visitor IPs)
+/data/rate-limits.json
 /data/*.tmp

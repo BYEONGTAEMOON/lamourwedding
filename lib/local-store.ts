@@ -13,6 +13,7 @@ export const UPLOAD_DIR = path.join(DATA_DIR, 'uploads');
 
 export const CONTENT_FILE = path.join(DATA_DIR, 'site-content.json');
 export const RESERVATIONS_FILE = path.join(DATA_DIR, 'reservations.json');
+export const RATE_LIMIT_FILE = path.join(DATA_DIR, 'rate-limits.json');
 
 export async function readJson<T>(file: string, fallback: T): Promise<T> {
     try {
