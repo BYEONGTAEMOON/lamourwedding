@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
+import { MARKETING_NOTICE, PRIVACY_NOTICE, type ConsentNotice } from "../_content";
 import { createReservation } from "../actions";
 import { useReservation } from "./reservation-context";
 
@@ -59,6 +60,56 @@ function OptionGroup({
           );
         })}
       </div>
+    </div>
+  );
+}
+
+// A consent checkbox with a "보기" toggle that shows what the consent covers.
+function ConsentRow({
+  checked,
+  onChange,
+  notice,
+  className = "",
+  children,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  notice: ConsentNotice;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center justify-between gap-3">
+        <label className={`flex cursor-pointer items-center gap-2.5 ${className}`}>
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={(e) => onChange(e.target.checked)}
+            className="size-[18px] flex-none accent-primary"
+          />
+          {children}
+        </label>
+        <button
+          type="button"
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+          className="flex-none cursor-pointer text-[13px] text-muted underline underline-offset-2"
+        >
+          {open ? "닫기" : "보기"}
+        </button>
+      </div>
+      {open && (
+        <dl className="m-0 grid grid-cols-[auto_1fr] gap-x-3 break-keep gap-y-1.5 rounded border border-line bg-paper px-3.5 py-3 text-[13px] leading-[1.6] text-body">
+          {notice.map((n) => (
+            <div key={n.label} className="contents">
+              <dt className="font-semibold whitespace-nowrap text-ink/80">{n.label}</dt>
+              <dd className="m-0">{n.value}</dd>
+            </div>
+          ))}
+        </dl>
+      )}
     </div>
   );
 }
@@ -206,27 +257,19 @@ export function RsvpForm({
       />
 
       <div className="flex flex-col gap-2.5 text-sm text-ink/80">
-        <label className="flex cursor-pointer items-center gap-2.5">
-          <input
-            type="checkbox"
-            checked={agree}
-            onChange={(e) => {
-              setAgree(e.target.checked);
-              setError("");
-            }}
-            className="size-[18px] accent-primary"
-          />
+        <ConsentRow
+          checked={agree}
+          onChange={(v) => {
+            setAgree(v);
+            setError("");
+          }}
+          notice={PRIVACY_NOTICE}
+        >
           [필수] 개인정보 수집·이용에 동의합니다.
-        </label>
-        <label className="flex cursor-pointer items-center gap-2.5 text-muted">
-          <input
-            type="checkbox"
-            checked={marketing}
-            onChange={(e) => setMarketing(e.target.checked)}
-            className="size-[18px] accent-primary"
-          />
+        </ConsentRow>
+        <ConsentRow checked={marketing} onChange={setMarketing} notice={MARKETING_NOTICE} className="text-muted">
           [선택] 마케팅 정보 수신에 동의합니다.
-        </label>
+        </ConsentRow>
       </div>
 
       {/* Honeypot for bots; hidden from people and assistive tech. */}

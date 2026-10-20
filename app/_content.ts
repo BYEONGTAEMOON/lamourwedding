@@ -167,3 +167,20 @@ export const FAQS = [
         a: '꼭 계약하실 필요는 없습니다. 다양한 웨딩 상품과 견적을 비교하고 충분히 상담받아 보세요. 중요한 결혼 준비인 만큼 원하는 조건을 꼼꼼히 확인하고 신중하게 결정하시는 것이 좋습니다.',
     },
 ];
+
+// Consent notices shown under the reservation form checkboxes.
+export type ConsentNotice = { label: string; value: string }[];
+
+export const PRIVACY_NOTICE: ConsentNotice = [
+    { label: '수집 항목', value: '이름, 휴대폰 번호, 결혼 예정 시기, 방문 희망일' },
+    { label: '이용 목적', value: '웨딩박람회 사전예약 접수, 방문 일정 확인 및 상담 안내 연락' },
+    { label: '보유 기간', value: '박람회 종료 후 1년까지 보관 후 파기 (삭제를 요청하시면 즉시 파기)' },
+    { label: '동의 거부', value: '동의를 거부할 수 있으며, 거부 시 사전예약 신청이 제한됩니다.' },
+];
+
+export const MARKETING_NOTICE: ConsentNotice = [
+    { label: '수집 항목', value: '이름, 휴대폰 번호' },
+    { label: '이용 목적', value: '웨딩 이벤트·혜택 및 박람회 일정 안내 (문자, 전화)' },
+    { label: '보유 기간', value: '동의를 철회할 때까지' },
+    { label: '동의 거부', value: '동의하지 않아도 사전예약 신청은 가능합니다.' },
+];
