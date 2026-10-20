@@ -1,0 +1,932 @@
+{
+  "daegu:seats": {
+    "total": 100,
+    "left": 26
+  },
+  "daegu:form": {
+    "weddingMonths": [
+      "2027년 상반기",
+      "2027년 하반기",
+      "2028년 상반기",
+      "2028년 하반기"
+    ],
+    "visitDays": [
+      "10/24(토)",
+      "10/25(일)"
+    ]
+  },
+  "daegu:partners": [
+    {
+      "id": "hall",
+      "label": "웨딩홀",
+      "count": "34+",
+      "items": [
+        {
+          "name": "MH컨벤션",
+          "image": "/assets/halls/hall-01.webp"
+        },
+        {
+          "name": "M스타하우스웨딩",
+          "image": "/assets/halls/hall-02.webp"
+        },
+        {
+          "name": "노비아갈라동촌점",
+          "image": "/assets/halls/hall-03.webp"
+        },
+        {
+          "name": "퀸벨호텔",
+          "image": "/assets/halls/hall-04.webp"
+        },
+        {
+          "name": "메리어트",
+          "image": "/assets/halls/hall-05.webp"
+        },
+        {
+          "name": "엑스코 인터불고",
+          "image": "/assets/halls/hall-06.webp"
+        },
+        {
+          "name": "노비아갈라전자관점",
+          "image": "/assets/halls/hall-07.webp"
+        },
+        {
+          "name": "엘파소하우스웨딩",
+          "image": "/assets/halls/hall-08.webp"
+        },
+        {
+          "name": "중앙컨벤션",
+          "image": "/assets/halls/hall-09.webp"
+        },
+        {
+          "name": "웨딩 메르디앙",
+          "image": "/assets/halls/hall-10.webp"
+        },
+        {
+          "name": "AW호텔",
+          "image": "/assets/halls/hall-11.webp"
+        },
+        {
+          "name": "라온웨딩",
+          "image": "/assets/halls/hall-12.webp"
+        },
+        {
+          "name": "웨딩비엔나",
+          "image": "/assets/halls/hall-13.webp"
+        },
+        {
+          "name": "라테라스",
+          "image": "/assets/halls/hall-14.webp"
+        },
+        {
+          "name": "파라다이스",
+          "image": "/assets/halls/hall-15.webp"
+        },
+        {
+          "name": "아리아나호텔",
+          "image": "/assets/halls/hall-16.webp"
+        },
+        {
+          "name": "웨딩아테네",
+          "image": "/assets/halls/hall-17.webp"
+        },
+        {
+          "name": "수성스퀘어",
+          "image": "/assets/halls/hall-18.webp"
+        },
+        {
+          "name": "호텔인터불고만촌점",
+          "image": "/assets/halls/hall-19.webp"
+        },
+        {
+          "name": "라온제나호텔",
+          "image": "/assets/halls/hall-20.webp"
+        },
+        {
+          "name": "더아트라움",
+          "image": "/assets/halls/hall-21.webp"
+        },
+        {
+          "name": "스타디움컨벤션웨딩",
+          "image": "/assets/halls/hall-22.webp"
+        },
+        {
+          "name": "마리드메이",
+          "image": "/assets/halls/hall-23.webp"
+        },
+        {
+          "name": "뉴욕뉴욕",
+          "image": "/assets/halls/hall-24.webp"
+        },
+        {
+          "name": "로터스101",
+          "image": "/assets/halls/hall-25.webp"
+        },
+        {
+          "name": "어반폴",
+          "image": "/assets/halls/hall-26.webp"
+        },
+        {
+          "name": "칼라디움",
+          "image": "/assets/halls/hall-27.webp"
+        },
+        {
+          "name": "스카이나인스",
+          "image": "/assets/halls/hall-28.webp"
+        },
+        {
+          "name": "륜",
+          "image": "/assets/halls/hall-29.webp"
+        },
+        {
+          "name": "아현정",
+          "image": "/assets/halls/hall-30.webp"
+        },
+        {
+          "name": "보스코",
+          "image": "/assets/halls/hall-31.webp"
+        },
+        {
+          "name": "프리아",
+          "image": "/assets/halls/hall-32.webp"
+        },
+        {
+          "name": "J컨벤션웨딩",
+          "image": "/assets/halls/hall-33.webp"
+        },
+        {
+          "name": "bw웨딩",
+          "image": "/assets/halls/hall-34.webp"
+        },
+        {
+          "name": "토미스퀘어가든",
+          "image": "/assets/halls/hall-35.webp"
+        },
+        {
+          "name": "라뷰웨딩",
+          "image": "/assets/halls/hall-36.webp"
+        },
+        {
+          "name": "금오산호텔",
+          "image": "/assets/halls/hall-37.webp"
+        }
+      ]
+    },
+    {
+      "id": "studio",
+      "label": "스튜디오",
+      "count": "81+",
+      "items": [
+        {
+          "name": "그가사랑하는순간",
+          "image": "/assets/studios/studio-01.webp"
+        },
+        {
+          "name": "온느",
+          "image": "/assets/studios/studio-02.webp"
+        },
+        {
+          "name": "플랜노트",
+          "image": "/assets/studios/studio-03.webp"
+        },
+        {
+          "name": "비마이",
+          "image": "/assets/studios/studio-04.webp"
+        },
+        {
+          "name": "세미앙",
+          "image": "/assets/studios/studio-05.webp"
+        },
+        {
+          "name": "일라이",
+          "image": "/assets/studios/studio-06.webp"
+        },
+        {
+          "name": "아우라",
+          "image": "/assets/studios/studio-07.webp"
+        },
+        {
+          "name": "고",
+          "image": "/assets/studios/studio-08.webp"
+        },
+        {
+          "name": "소나르",
+          "image": "/assets/studios/studio-09.webp"
+        },
+        {
+          "name": "바로오늘이그날",
+          "image": "/assets/studios/studio-10.webp"
+        },
+        {
+          "name": "피아",
+          "image": "/assets/studios/studio-11.webp"
+        },
+        {
+          "name": "러브이치아덜",
+          "image": "/assets/studios/studio-12.webp"
+        },
+        {
+          "name": "헤이즐리",
+          "image": "/assets/studios/studio-13.webp"
+        },
+        {
+          "name": "보메가든",
+          "image": "/assets/studios/studio-14.webp"
+        },
+        {
+          "name": "럽조이",
+          "image": "/assets/studios/studio-15.webp"
+        },
+        {
+          "name": "보어하우스",
+          "image": "/assets/studios/studio-16.webp"
+        },
+        {
+          "name": "비비엔다",
+          "image": "/assets/studios/studio-17.webp"
+        },
+        {
+          "name": "에밀리",
+          "image": "/assets/studios/studio-18.webp"
+        },
+        {
+          "name": "루브하우스",
+          "image": "/assets/studios/studio-19.webp"
+        },
+        {
+          "name": "노우드",
+          "image": "/assets/studios/studio-20.webp"
+        },
+        {
+          "name": "아이브하우스",
+          "image": "/assets/studios/studio-21.webp"
+        },
+        {
+          "name": "아오베하임",
+          "image": "/assets/studios/studio-22.webp"
+        },
+        {
+          "name": "노이",
+          "image": "/assets/studios/studio-23.webp"
+        },
+        {
+          "name": "모던마인드",
+          "image": "/assets/studios/studio-24.webp"
+        },
+        {
+          "name": "니즈",
+          "image": "/assets/studios/studio-25.webp"
+        },
+        {
+          "name": "어반",
+          "image": "/assets/studios/studio-26.webp"
+        },
+        {
+          "name": "메이든",
+          "image": "/assets/studios/studio-27.webp"
+        },
+        {
+          "name": "모네",
+          "image": "/assets/studios/studio-28.webp"
+        },
+        {
+          "name": "라앤디",
+          "image": "/assets/studios/studio-29.webp"
+        },
+        {
+          "name": "르안",
+          "image": "/assets/studios/studio-30.webp"
+        },
+        {
+          "name": "아뜰리에엘스",
+          "image": "/assets/studios/studio-31.webp"
+        },
+        {
+          "name": "알마",
+          "image": "/assets/studios/studio-32.webp"
+        },
+        {
+          "name": "베누아",
+          "image": "/assets/studios/studio-33.webp"
+        },
+        {
+          "name": "오데뜨",
+          "image": "/assets/studios/studio-34.webp"
+        },
+        {
+          "name": "루이246",
+          "image": "/assets/studios/studio-35.webp"
+        },
+        {
+          "name": "루나",
+          "image": "/assets/studios/studio-36.webp"
+        },
+        {
+          "name": "베네사",
+          "image": "/assets/studios/studio-37.webp"
+        },
+        {
+          "name": "벨리바이고",
+          "image": "/assets/studios/studio-38.webp"
+        },
+        {
+          "name": "그루비오블랙",
+          "image": "/assets/studios/studio-39.webp"
+        }
+      ]
+    },
+    {
+      "id": "dress",
+      "label": "드레스",
+      "count": "54+",
+      "items": [
+        {
+          "name": "더청담엘브라이드",
+          "image": "/assets/dresses/dress-01.webp"
+        },
+        {
+          "name": "라비앙로즈",
+          "image": "/assets/dresses/dress-02.webp"
+        },
+        {
+          "name": "로얄드웨딩",
+          "image": "/assets/dresses/dress-03.webp"
+        },
+        {
+          "name": "리아웨딩",
+          "image": "/assets/dresses/dress-04.webp"
+        },
+        {
+          "name": "마리스포사",
+          "image": "/assets/dresses/dress-05.webp"
+        },
+        {
+          "name": "메종드벨라",
+          "image": "/assets/dresses/dress-06.webp"
+        },
+        {
+          "name": "석미송",
+          "image": "/assets/dresses/dress-07.webp"
+        },
+        {
+          "name": "소유드블랑",
+          "image": "/assets/dresses/dress-08.webp"
+        },
+        {
+          "name": "아델",
+          "image": "/assets/dresses/dress-09.webp"
+        },
+        {
+          "name": "아뜰리에레이나",
+          "image": "/assets/dresses/dress-10.webp"
+        },
+        {
+          "name": "아이테오",
+          "image": "/assets/dresses/dress-11.webp"
+        },
+        {
+          "name": "프리체",
+          "image": "/assets/dresses/dress-12.webp"
+        },
+        {
+          "name": "효제브라이덜",
+          "image": "/assets/dresses/dress-13.webp"
+        }
+      ]
+    },
+    {
+      "id": "makeup",
+      "label": "혼수",
+      "count": "41+",
+      "items": [
+        {
+          "name": "오브그나",
+          "image": "/assets/honsu/honsu-01.webp"
+        },
+        {
+          "name": "디바인핸즈",
+          "image": "/assets/honsu/honsu-02.webp"
+        },
+        {
+          "name": "라포르",
+          "image": "/assets/honsu/honsu-03.webp"
+        },
+        {
+          "name": "로얄테일러",
+          "image": "/assets/honsu/honsu-04.webp"
+        },
+        {
+          "name": "빈센트 콜레오네",
+          "image": "/assets/honsu/honsu-05.webp"
+        },
+        {
+          "name": "아틀레",
+          "image": "/assets/honsu/honsu-06.webp"
+        },
+        {
+          "name": "라의재",
+          "image": "/assets/honsu/honsu-07.webp"
+        },
+        {
+          "name": "설레인한복",
+          "image": "/assets/honsu/honsu-08.webp"
+        },
+        {
+          "name": "블리스스냅",
+          "image": "/assets/honsu/honsu-09.webp"
+        },
+        {
+          "name": "유나필름",
+          "image": "/assets/honsu/honsu-10.webp"
+        },
+        {
+          "name": "혜음스냅",
+          "image": "/assets/honsu/honsu-11.webp"
+        },
+        {
+          "name": "너와만나스냅",
+          "image": "/assets/honsu/honsu-12.webp"
+        },
+        {
+          "name": "LG",
+          "image": "/assets/honsu/honsu-13.webp"
+        }
+      ]
+    }
+  ],
+  "busan:partners": [
+    {
+      "id": "hall",
+      "label": "웨딩홀",
+      "count": "41+",
+      "items": [
+        {
+          "name": "롯데호텔",
+          "image": "/assets/halls/busan/hall-01.webp"
+        },
+        {
+          "name": "힐튼",
+          "image": "/assets/halls/busan/hall-02.webp"
+        },
+        {
+          "name": "파라다이스",
+          "image": "/assets/halls/busan/hall-03.webp"
+        },
+        {
+          "name": "파크하얏트",
+          "image": "/assets/halls/busan/hall-04.webp"
+        },
+        {
+          "name": "웨스틴 조선",
+          "image": "/assets/halls/busan/hall-05.webp"
+        },
+        {
+          "name": "그랜드 조선",
+          "image": "/assets/halls/busan/hall-06.webp"
+        },
+        {
+          "name": "농심호텔",
+          "image": "/assets/halls/busan/hall-07.webp"
+        },
+        {
+          "name": "윈덤 그랜드",
+          "image": "/assets/halls/busan/hall-08.webp"
+        },
+        {
+          "name": "코모도",
+          "image": "/assets/halls/busan/hall-09.webp"
+        },
+        {
+          "name": "헤리움웨딩홀",
+          "image": "/assets/halls/busan/hall-10.webp"
+        },
+        {
+          "name": "그랜드모먼트",
+          "image": "/assets/halls/busan/hall-11.webp"
+        },
+        {
+          "name": "파라곤호텔",
+          "image": "/assets/halls/busan/hall-12.webp"
+        },
+        {
+          "name": "아바니호텔",
+          "image": "/assets/halls/busan/hall-13.webp"
+        },
+        {
+          "name": "그랜드블랑",
+          "image": "/assets/halls/busan/hall-14.webp"
+        },
+        {
+          "name": "다비다웨딩홀",
+          "image": "/assets/halls/busan/hall-15.webp"
+        },
+        {
+          "name": "프리미어",
+          "image": "/assets/halls/busan/hall-16.webp"
+        },
+        {
+          "name": "디엘",
+          "image": "/assets/halls/busan/hall-17.webp"
+        },
+        {
+          "name": "센텀 호텔",
+          "image": "/assets/halls/busan/hall-18.webp"
+        },
+        {
+          "name": "아시아드",
+          "image": "/assets/halls/busan/hall-19.webp"
+        },
+        {
+          "name": "라온웨딩",
+          "image": "/assets/halls/busan/hall-20.webp"
+        },
+        {
+          "name": "부산호텔",
+          "image": "/assets/halls/busan/hall-21.webp"
+        },
+        {
+          "name": "라발스호텔",
+          "image": "/assets/halls/busan/hall-22.webp"
+        },
+        {
+          "name": "한화리조트",
+          "image": "/assets/halls/busan/hall-23.webp"
+        },
+        {
+          "name": "롯데갤러리움",
+          "image": "/assets/halls/busan/hall-24.webp"
+        },
+        {
+          "name": "호메르스호텔",
+          "image": "/assets/halls/busan/hall-25.webp"
+        },
+        {
+          "name": "사학연금",
+          "image": "/assets/halls/busan/hall-26.webp"
+        },
+        {
+          "name": "해암",
+          "image": "/assets/halls/busan/hall-27.webp"
+        },
+        {
+          "name": "이리스",
+          "image": "/assets/halls/busan/hall-28.webp"
+        },
+        {
+          "name": "골든웨딩홀",
+          "image": "/assets/halls/busan/hall-29.webp"
+        }
+      ]
+    },
+    {
+      "id": "studio",
+      "label": "스튜디오",
+      "count": "81+",
+      "items": [
+        {
+          "name": "비마이",
+          "image": "/assets/studios/busan/studio-01.webp"
+        },
+        {
+          "name": "인하우스",
+          "image": "/assets/studios/busan/studio-02.webp"
+        },
+        {
+          "name": "고",
+          "image": "/assets/studios/busan/studio-03.webp"
+        },
+        {
+          "name": "온느",
+          "image": "/assets/studios/busan/studio-04.webp"
+        },
+        {
+          "name": "러브이치아덜",
+          "image": "/assets/studios/busan/studio-05.webp"
+        },
+        {
+          "name": "모네",
+          "image": "/assets/studios/busan/studio-06.webp"
+        },
+        {
+          "name": "럽조이",
+          "image": "/assets/studios/busan/studio-07.webp"
+        },
+        {
+          "name": "보메가든",
+          "image": "/assets/studios/busan/studio-08.webp"
+        },
+        {
+          "name": "노이",
+          "image": "/assets/studios/busan/studio-09.webp"
+        },
+        {
+          "name": "노우드",
+          "image": "/assets/studios/busan/studio-10.webp"
+        },
+        {
+          "name": "루브하우스",
+          "image": "/assets/studios/busan/studio-11.webp"
+        },
+        {
+          "name": "모던마인드",
+          "image": "/assets/studios/busan/studio-12.webp"
+        },
+        {
+          "name": "베네사",
+          "image": "/assets/studios/busan/studio-13.webp"
+        },
+        {
+          "name": "알마",
+          "image": "/assets/studios/busan/studio-14.webp"
+        },
+        {
+          "name": "그루비오블랙",
+          "image": "/assets/studios/busan/studio-15.webp"
+        },
+        {
+          "name": "오데뜨",
+          "image": "/assets/studios/busan/studio-16.webp"
+        },
+        {
+          "name": "벨리바이고",
+          "image": "/assets/studios/busan/studio-17.webp"
+        },
+        {
+          "name": "고운스튜디오",
+          "image": "/assets/studios/busan/studio-18.webp"
+        },
+        {
+          "name": "앤스틸스튜디오",
+          "image": "/assets/studios/busan/studio-19.webp"
+        },
+        {
+          "name": "헤이즐리",
+          "image": "/assets/studios/busan/studio-20.webp"
+        },
+        {
+          "name": "바로오늘이그날",
+          "image": "/assets/studios/busan/studio-21.webp"
+        },
+        {
+          "name": "소나르",
+          "image": "/assets/studios/busan/studio-22.webp"
+        },
+        {
+          "name": "아이브하우스",
+          "image": "/assets/studios/busan/studio-23.webp"
+        },
+        {
+          "name": "아우라",
+          "image": "/assets/studios/busan/studio-24.webp"
+        },
+        {
+          "name": "플랜노트",
+          "image": "/assets/studios/busan/studio-25.webp"
+        }
+      ]
+    },
+    {
+      "id": "dress",
+      "label": "드레스",
+      "count": "84+",
+      "items": [
+        {
+          "name": "더청담엘브라이드",
+          "image": "/assets/dresses/dress-01.webp"
+        },
+        {
+          "name": "라비앙로즈",
+          "image": "/assets/dresses/dress-02.webp"
+        },
+        {
+          "name": "로얄드웨딩",
+          "image": "/assets/dresses/dress-03.webp"
+        },
+        {
+          "name": "리아웨딩",
+          "image": "/assets/dresses/dress-04.webp"
+        },
+        {
+          "name": "마리스포사",
+          "image": "/assets/dresses/dress-05.webp"
+        },
+        {
+          "name": "메종드벨라",
+          "image": "/assets/dresses/dress-06.webp"
+        },
+        {
+          "name": "석미송",
+          "image": "/assets/dresses/dress-07.webp"
+        },
+        {
+          "name": "소유드블랑",
+          "image": "/assets/dresses/dress-08.webp"
+        },
+        {
+          "name": "아델",
+          "image": "/assets/dresses/dress-09.webp"
+        },
+        {
+          "name": "아뜰리에레이나",
+          "image": "/assets/dresses/dress-10.webp"
+        },
+        {
+          "name": "아이테오",
+          "image": "/assets/dresses/dress-11.webp"
+        },
+        {
+          "name": "프리체",
+          "image": "/assets/dresses/dress-12.webp"
+        },
+        {
+          "name": "효제브라이덜",
+          "image": "/assets/dresses/dress-13.webp"
+        }
+      ]
+    },
+    {
+      "id": "makeup",
+      "label": "혼수",
+      "count": "41+",
+      "items": [
+        {
+          "name": "오브그나",
+          "image": "/assets/honsu/honsu-01.webp"
+        },
+        {
+          "name": "디바인핸즈",
+          "image": "/assets/honsu/honsu-02.webp"
+        },
+        {
+          "name": "라포르",
+          "image": "/assets/honsu/honsu-03.webp"
+        },
+        {
+          "name": "로얄테일러",
+          "image": "/assets/honsu/honsu-04.webp"
+        },
+        {
+          "name": "빈센트 콜레오네",
+          "image": "/assets/honsu/honsu-05.webp"
+        },
+        {
+          "name": "아틀레",
+          "image": "/assets/honsu/honsu-06.webp"
+        },
+        {
+          "name": "라의재",
+          "image": "/assets/honsu/honsu-07.webp"
+        },
+        {
+          "name": "설레인한복",
+          "image": "/assets/honsu/honsu-08.webp"
+        },
+        {
+          "name": "블리스스냅",
+          "image": "/assets/honsu/honsu-09.webp"
+        },
+        {
+          "name": "유나필름",
+          "image": "/assets/honsu/honsu-10.webp"
+        },
+        {
+          "name": "혜음스냅",
+          "image": "/assets/honsu/honsu-11.webp"
+        },
+        {
+          "name": "너와만나스냅",
+          "image": "/assets/honsu/honsu-12.webp"
+        },
+        {
+          "name": "LG",
+          "image": "/assets/honsu/honsu-13.webp"
+        }
+      ]
+    }
+  ],
+  "busan:event": {
+    "brand": "BUSAN LAMOUR",
+    "eyebrow": "LAMOUR WEDDING CONVENTION · VOL.2026",
+    "titleLine1": "부산 결혼준비",
+    "titleAccent": "27~28년",
+    "titleRest": "웨딩박람회",
+    "subtitle": "준비 비용과 시간을 실제로 줄여드리는 결혼준비.\n라모르가 함께 합니다.",
+    "dateMain": "10.24 (토) – 10.25 (일)",
+    "dateSub": "주말 10:00 – 20:00"
+  },
+  "busan:location": {
+    "placeName": "골든웨딩타운",
+    "placeAddress": "금정구 부곡동 225-73",
+    "address1": "부산 금정구 부곡동 225-73",
+    "address2": "골든웨딩타운",
+    "addressNote": "골든웨딩타운 주차장",
+    "phone": "010.9799.0729",
+    "hours": "오전 11:00 ~ 오후 8:00",
+    "notice": "주말에는 주차가 혼잡하니 대중교통 이용을 권장합니다.",
+    "mapQuery": "부산 금정구 부곡동 225-73",
+    "naverUrl": "",
+    "tmapUrl": "https://tmap.life"
+  },
+  "busan:form": {
+    "weddingMonths": [
+      "2027년 상반기",
+      "2027년 하반기",
+      "2028년 상반기",
+      "2028년 하반기"
+    ],
+    "visitDays": [
+      "10/31(토)",
+      "11/1(일)"
+    ]
+  },
+  "busan:hero": {
+    "image": "/uploads/hero/6abc3c7c-223b-44a6-8c14-3f9ae857bba2.webp",
+    "alt": "부산 웨딩박람회"
+  },
+  "gimhae:event": {
+    "brand": "GIMHAE LAMOUR",
+    "eyebrow": "LAMOUR WEDDING CONVENTION · VOL.2026",
+    "titleLine1": "김해 신세계백화점",
+    "titleAccent": "27~28년",
+    "titleRest": "웨딩박람회",
+    "subtitle": "준비 비용과 시간을 실제로 줄여드리는 결혼준비.\n라모르가 함께 합니다.",
+    "dateMain": "11.21 (토) – 11.22 (일)",
+    "dateSub": "주말 10:00 – 20:00"
+  },
+  "gimhae:hero": {
+    "image": "/uploads/hero/529463ad-dac4-41be-96fa-4d428fb47550.webp",
+    "alt": "김해 웨딩박람회"
+  },
+  "gimhae:location": {
+    "placeName": "김해 신세계백화점 엘지",
+    "placeAddress": "김해대로 2232",
+    "address1": "김해시 김해대로 2232",
+    "address2": "신세계백화점 4F LG베스트샵",
+    "addressNote": "김해 신세계백화점 주차장",
+    "phone": "010.9799.0729",
+    "hours": "오전 11:00 ~ 오후 8:00",
+    "notice": "주말에는 주차가 혼잡하니 대중교통 이용을 권장합니다.",
+    "mapQuery": "김해시 김해대로 2232 신세계백화점",
+    "naverUrl": "",
+    "tmapUrl": "https://tmap.life"
+  },
+  "pohang:event": {
+    "brand": "POHANG LAMOUR",
+    "eyebrow": "LAMOUR WEDDING CONVENTION · VOL.2026",
+    "titleLine1": "포항 롯데백화점",
+    "titleAccent": "27~28년",
+    "titleRest": "웨딩박람회",
+    "subtitle": "준비 비용과 시간을 실제로 줄여드리는 결혼준비.\n라모르가 함께 합니다.",
+    "dateMain": "11.7 (토) – 11.8 (일)",
+    "dateSub": "주말 10:00 – 20:00"
+  },
+  "pohang:location": {
+    "placeName": "포항 롯데백화점 엘지",
+    "placeAddress": "북구 학산로 62",
+    "address1": "포항 북구 학산로 62",
+    "address2": "롯데백화점 8층 LG베스트샵",
+    "addressNote": "포항 롯데백화점 주차장",
+    "phone": "010.9799.0729",
+    "hours": "오전 11:00 ~ 오후 8:00",
+    "notice": "주말에는 주차가 혼잡하니 대중교통 이용을 권장합니다.",
+    "mapQuery": "포항 롯데백화점",
+    "naverUrl": "",
+    "tmapUrl": "https://tmap.life"
+  },
+  "daegu:location": {
+    "placeName": "대구 신세계백화점 엘지",
+    "placeAddress": "동구 동부로 149 신세계백화점 6F",
+    "address1": "대구 동구 동부로 149",
+    "address2": "신세계백화점 6F LG베스트샵",
+    "addressNote": "대구 신세계백화점 주차장",
+    "phone": "010.9799.0729",
+    "hours": "오전 11:00 ~ 오후 8:00",
+    "notice": "주말에는 주차가 혼잡하니 대중교통 이용을 권장합니다.",
+    "mapQuery": "대구 동구 동부로 149 신세계백화점",
+    "naverUrl": "",
+    "tmapUrl": "https://tmap.life"
+  },
+  "pohang:form": {
+    "weddingMonths": [
+      "2027년 상반기",
+      "2027년 하반기",
+      "2028년 상반기",
+      "2028년 하반기"
+    ],
+    "visitDays": [
+      "11/7(토)",
+      "11/8(일)"
+    ]
+  },
+  "gimhae:form": {
+    "weddingMonths": [
+      "2027년 상반기",
+      "2027년 하반기",
+      "2028년 상반기",
+      "2028년 하반기"
+    ],
+    "visitDays": [
+      "11/21(토)",
+      "11/22(일)"
+    ]
+  }
+}

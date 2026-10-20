@@ -1,26 +1,75 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: var(--font-noto-serif-kr), serif;
+  --font-display: var(--font-playfair), serif;
+
+  /* Blush palette built around the petal accent (#dd8484). */
+  --color-cream: #fbf6f3;
+  --color-paper: #fffcfa;
+  --color-sand: #f6ebe7;
+  --color-parchment: #f1e2dd;
+  --color-line: #eedcd6;
+  --color-taupe: #dcc3bb;
+  --color-ink: #2e2224;
+  --color-body: #66575a;
+  --color-muted: #7a6a6c;
+  --color-petal: #dd8484;
+  --color-petal-ink: #3a171c; /* text on petal; white is only 2.7:1 there */
+  --color-petal-body: #55262b;
+  --color-primary: #9e4a52;
+  --color-primary-dark: #7f3a41;
+  --color-mauve: #9a6b72;
+  --color-gold: #b7836b;
+  --color-champagne: #f3d3a5;
+  --color-rose: #c0444c;
+
+  --animate-ticker-in: ticker-in 0.5s ease;
+  --animate-marquee: marquee 40s linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes ticker-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    line-height: normal;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  a:hover {
+    color: var(--color-primary-dark);
+  }
+
+  input::placeholder {
+    color: #bfaeab;
+  }
 }
