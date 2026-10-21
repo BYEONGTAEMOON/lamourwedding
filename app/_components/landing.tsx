@@ -4,9 +4,10 @@ import { Partners } from './partners';
 import { ReservationProvider } from './reservation-context';
 import { ReviewSlider } from './review-slider';
 import { RsvpForm } from './rsvp-form';
+import { BenefitsSection, Eyebrow, SectionTitle, SiteFooter, WhySection } from './sections';
 import { StickyCta } from './sticky-cta';
 import { Ticker } from './ticker';
-import { BENEFITS, GIFTS, NAV, WHY } from '../_content';
+import { GIFTS, NAV } from '../_content';
 // Static import: the URL carries a content hash, so replacing the file always shows the new image.
 // Used unless an image was uploaded from the admin (hero.image).
 import heroImage from '@/public/assets/hero.png';
@@ -14,38 +15,6 @@ import reviewMainImage from '@/public/assets/review-main.png';
 import { getSiteContent } from '@/lib/content';
 import type { RegionId } from '@/lib/regions';
 import { googleMapEmbedUrl, naverMapUrl, tickerText } from '@/lib/site-content';
-
-function Eyebrow({
-    children,
-    className = 'text-gold',
-}: {
-    children: React.ReactNode;
-    className?: string;
-}) {
-    return (
-        <div
-            className={`font-display text-[13px] tracking-[.3em] ${className}`}
-        >
-            {children}
-        </div>
-    );
-}
-
-function SectionTitle({
-    children,
-    className = '',
-}: {
-    children: React.ReactNode;
-    className?: string;
-}) {
-    return (
-        <h2
-            className={`m-0 font-serif text-[clamp(30px,3.6vw,42px)] leading-[1.3] font-normal ${className}`}
-        >
-            {children}
-        </h2>
-    );
-}
 
 function Stars({ className }: { className: string }) {
     return (
@@ -55,15 +24,18 @@ function Stars({ className }: { className: string }) {
     );
 }
 
-// The whole landing page for one region; "/" renders Daegu, "/[region]" the others.
+// The whole landing page for one region, served at "/[region]".
 export async function Landing({ region }: { region: RegionId }) {
-    const { event, hero, reviews, seats, location, form, ticker, partners } = await getSiteContent(region);
+    const { event, hero, reviews, seats, location, form, ticker, partners } =
+        await getSiteContent(region);
     const seatsPct = `${Math.round(((seats.total - seats.left) / seats.total) * 100)}%`;
 
     return (
         <ReservationProvider>
             <div className="min-h-screen bg-cream">
-                {ticker.enabled && <Ticker items={ticker.entries.map(tickerText)} />}
+                {ticker.enabled && (
+                    <Ticker items={ticker.entries.map(tickerText)} />
+                )}
 
                 <header className="sticky top-0 z-20 border-b border-line bg-cream/90 backdrop-blur-[10px]">
                     <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 px-6 py-3.5">
@@ -148,7 +120,7 @@ export async function Landing({ region }: { region: RegionId }) {
 
                         <div className="flex max-w-[520px] flex-col gap-2.5">
                             <div className="flex justify-between text-[13px] text-body">
-                                <span>이번 주 {seats.total}팀 한정</span>
+                                <span>행사 주 {seats.total}팀 한정</span>
                                 <span>
                                     잔여{' '}
                                     <strong className="text-rose">
@@ -192,106 +164,9 @@ export async function Landing({ region }: { region: RegionId }) {
                     </div>
                 </section>
 
-                {/* Why Direct */}
-                <section className="bg-petal text-petal-ink">
-                    <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-10 px-6 py-[72px]">
-                        <div className="flex flex-col gap-3">
-                            <Eyebrow className="text-petal-body">
-                                WHY LAMOUR
-                            </Eyebrow>
-                            <div className="font-serif text-[26px] leading-[1.45] text-petal-ink">
-                                리뉴얼 된
-                                <br />
-                                라모르 웨딩컨설팅
-                            </div>
-                        </div>
-                        {WHY.map((w) => (
-                            <div
-                                key={w.title}
-                                className="flex flex-col gap-2.5 border-t border-petal-ink/20 pt-5"
-                            >
-                                <div className="font-serif text-4xl text-petal-ink">
-                                    {w.highlight ? (
-                                        <>
-                                            {w.stat.replace(w.highlight, '')}
-                                            <span className="text-white">
-                                                {w.highlight}
-                                            </span>
-                                        </>
-                                    ) : (
-                                        w.stat
-                                    )}
-                                </div>
-                                <div className="font-semibold text-petal-ink">
-                                    {w.title}
-                                </div>
-                                <div className="text-sm leading-[1.7] text-petal-body">
-                                    {w.desc}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                <WhySection />
 
-                {/* Benefits */}
-                <section
-                    id="benefits"
-                    className="border-b border-line bg-paper"
-                >
-                    <div className="mx-auto max-w-[1100px] px-6 py-24">
-                        <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
-                            <div className="flex flex-col gap-3.5">
-                                <Eyebrow>THIS WEEK ONLY</Eyebrow>
-                                <SectionTitle>
-                                    이번 주 등록 {seats.total}팀에게만
-                                </SectionTitle>
-                            </div>
-                            <p className="m-0 max-w-[340px] text-[15px] leading-[1.7] text-muted">
-                                사전등록만으로 아래 다섯 가지 혜택이 모두
-                                적용됩니다.
-                            </p>
-                        </div>
-
-                        <div className="flex flex-col border-t border-ink">
-                            {BENEFITS.map((b, i) => (
-                                <div
-                                    key={b.title}
-                                    className="grid grid-cols-[minmax(150px,220px)_minmax(0,1fr)] items-baseline gap-x-10 gap-y-6 border-b border-line py-8"
-                                >
-                                    <div className="font-serif text-[28px] text-primary">
-                                        {b.value}
-                                    </div>
-                                    <div className="flex flex-col gap-2.5">
-                                        <div className="font-serif text-xl">
-                                            <span className="mr-3 font-display text-sm text-gold">
-                                                {String(i + 1).padStart(2, '0')}
-                                            </span>
-                                            {b.title}
-                                        </div>
-                                        <div className="text-[15px] leading-[1.7] text-body">
-                                            {b.details.map(
-                                                ([label, bold], j) => (
-                                                    <span key={label}>
-                                                        {j > 0 && ' · '}
-                                                        {label}
-                                                        {bold && (
-                                                            <>
-                                                                {' '}
-                                                                <b className="text-ink">
-                                                                    {bold}
-                                                                </b>
-                                                            </>
-                                                        )}
-                                                    </span>
-                                                ),
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
+                <BenefitsSection title={`박람회 등록 ${seats.total}팀에게만`} />
 
                 {/* Partners */}
                 <section
@@ -350,9 +225,7 @@ export async function Landing({ region }: { region: RegionId }) {
                 >
                     <div className="mb-12 flex flex-col items-center gap-3.5 text-center">
                         <Eyebrow>VISIT GIFTS</Eyebrow>
-                        <SectionTitle>
-                            저희가 준비한 열 가지 선물
-                        </SectionTitle>
+                        <SectionTitle>저희가 준비한 열 가지 선물</SectionTitle>
                         <p className="m-0 text-[15px] text-muted">
                             방문 및 계약 고객 100% 증정
                         </p>
@@ -427,7 +300,11 @@ export async function Landing({ region }: { region: RegionId }) {
                             </ul>
                         </div>
                         <div className="rounded bg-paper p-[clamp(24px,4vw,40px)] shadow-[0_30px_60px_-30px_rgba(0,0,0,.5)]">
-                            <RsvpForm region={region} weddingMonths={form.weddingMonths} visitDays={form.visitDays} />
+                            <RsvpForm
+                                region={region}
+                                weddingMonths={form.weddingMonths}
+                                visitDays={form.visitDays}
+                            />
                         </div>
                     </div>
                 </section>
@@ -530,26 +407,7 @@ export async function Landing({ region }: { region: RegionId }) {
                     </div>
                 </section>
 
-                <footer className="bg-petal text-[13px] leading-[1.8] text-petal-body">
-                    <div className="mx-auto flex max-w-[1200px] flex-wrap justify-between gap-6 px-6 pt-12 pb-[120px]">
-                        <div className="font-display text-lg tracking-[.18em] text-petal-ink">
-                            LAMOUR
-                        </div>
-                        <div>
-                            (주)라모르웨딩 주식회사 · 사업자등록번호 112-86-03487 ·
-                            부산광역시 연제구 법원로8번길 10
-                            <br />
-                            <a
-                                href="#top"
-                                className="text-petal-ink underline hover:text-petal-ink"
-                            >
-                                개인정보처리방침
-                            </a>{' '}
-                            · © 2026 Lamour Wedding Convention.
-                                <div>designed by {'dfill'}</div>
-                        </div>
-                    </div>
-                </footer>
+                <SiteFooter />
 
                 <StickyCta seatsLeft={seats.left} />
             </div>

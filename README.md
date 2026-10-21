@@ -6,7 +6,8 @@ Next.js 16 랜딩 페이지와 `/admin` 관리자 페이지입니다. 데이터�
 
 | 지역 | 주소 |
 | --- | --- |
-| 대구 | `/` (`/daegu`는 `/`로 이동) |
+| 전체 지역 안내 (메인) | `/` |
+| 대구 | `/daegu` |
 | 김해 | `/gimhae` |
 | 부산 | `/busan` |
 | 포항 | `/pohang` |
@@ -63,7 +64,8 @@ npm run lint
 
 ## 구조
 
-- `app/page.tsx`: 랜딩 페이지. 관리자 편집 항목은 `lib/content.ts`의 `getSiteContent()`에서 읽습니다(캐시, 저장 시 즉시 갱신).
+- `app/page.tsx`: 메인. 네 지역 박람회를 날짜순 카드로 보여주고 각 지역 페이지로 연결합니다.
+- `app/[region]/page.tsx`, `app/_components/landing.tsx`: 지역별 랜딩 페이지. 관리자 편집 항목은 `lib/content.ts`의 `getSiteContent()`에서 읽습니다(캐시, 저장 시 즉시 갱신).
 - `app/_content.ts`: 코드로만 관리하는 고정 문구(혜택, 사은품, FAQ 등)
 - `app/actions.ts`: 사전예약 접수
 - `app/admin/`: 관리자 화면과 Server Actions
