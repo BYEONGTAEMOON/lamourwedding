@@ -19,7 +19,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
     title: '라모르 웨딩박람회',
     description:
-        '1,100여 개 제휴업체를 한자리에서 비교하세요. 사전예약 시 이번 주 한정 혜택과 방문 사은품을 드립니다.',
+        '1,100여 개 제휴업체를 한자리에서 비교하세요. 사전예약 시 박람회 한정 혜택과 방문 사은품을 드립니다.',
 };
 
 export default function RootLayout({ children }: LayoutProps<'/'>) {
