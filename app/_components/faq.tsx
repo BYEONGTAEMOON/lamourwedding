@@ -15,15 +15,21 @@ export function Faq() {
             <button
               type="button"
               aria-expanded={isOpen}
+              aria-controls={`faq-${i}`}
               onClick={() => setOpen(isOpen ? -1 : i)}
               className="flex w-full cursor-pointer items-center justify-between gap-4 border-none bg-transparent px-1 py-6 text-left text-[17px] font-semibold text-ink"
             >
               <span>{f.q}</span>
               <span className="flex-none text-[22px] font-light text-primary">{isOpen ? "−" : "+"}</span>
             </button>
-            {isOpen && (
-              <div className="px-1 pb-[26px] text-[15px] leading-[1.8] text-body text-pretty">{f.a}</div>
-            )}
+            {/* Closed answers stay in the HTML (hidden) so search engines can read every one. */}
+            <div
+              id={`faq-${i}`}
+              hidden={!isOpen}
+              className="px-1 pb-[26px] text-[15px] leading-[1.8] text-body text-pretty"
+            >
+              {f.a}
+            </div>
           </div>
         );
       })}

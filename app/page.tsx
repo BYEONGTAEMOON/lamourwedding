@@ -2,18 +2,21 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Faq } from './_components/faq';
-import { BenefitsSection, Eyebrow, SectionTitle, SiteFooter, WhySection } from './_components/sections';
+import { BenefitsSection, Eyebrow, JsonLd, SectionTitle, SiteFooter, SiteHeader, WhySection } from './_components/sections';
 // Static imports carry a content hash, so replacing the file always shows the new image.
 import heroImage from '@/public/assets/hero.png';
 import coupleImage from '@/public/assets/review-main.png';
 import { getSiteContent } from '@/lib/content';
 import { REGIONS, regionPath } from '@/lib/regions';
+import { homeJsonLd, pageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
     title: '라모르 웨딩박람회 | 대구·부산·포항·김해',
     description:
-        '대구·부산·포항·김해에서 열리는 라모르 웨딩박람회. 가까운 지역을 골라 무료로 사전예약하고 한정 혜택과 방문 사은품을 받아보세요.',
-};
+        '대구·부산·포항·김해 웨딩박람회 일정과 혜택을 확인하세요. 웨딩홀, 스드메, 허니문, 예물 등 결혼 준비 상담과 다양한 웨딩 혜택을 라모르 웨딩박람회에서 만나보세요.',
+    path: '/',
+    ogDescription: '대구·부산·포항·김해 웨딩박람회 일정, 참가 신청 및 결혼 준비 혜택을 확인하세요.',
+});
 
 const NAV = [
     { href: '#regions', label: '지역별 일정' },
@@ -42,31 +45,10 @@ export default async function Home() {
 
     return (
         <div className="min-h-screen bg-cream">
-            <header className="sticky top-0 z-20 border-b border-line bg-cream/90 backdrop-blur-[10px]">
-                <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 px-6 py-3.5">
-                    <a href="#top" className="flex items-baseline gap-2.5 text-ink">
-                        <span className="font-display text-xl font-semibold tracking-[.18em] text-primary">
-                            LAMOUR
-                        </span>
-                        <span className="font-serif text-[13px] text-muted">
-                            웨딩박람회
-                        </span>
-                    </a>
-                    <nav className="flex flex-wrap gap-[22px] text-sm">
-                        {NAV.map((n) => (
-                            <a key={n.href} href={n.href} className="text-body">
-                                {n.label}
-                            </a>
-                        ))}
-                    </nav>
-                    <a
-                        href="#regions"
-                        className="rounded-full bg-primary px-[18px] py-2.5 text-sm font-semibold text-white hover:bg-primary-dark hover:text-white"
-                    >
-                        사전예약
-                    </a>
-                </div>
-            </header>
+            <SiteHeader brand="LAMOUR" nav={NAV} ctaHref="#regions" />
+            <JsonLd data={homeJsonLd()} />
+
+            <main>
 
             {/* Hero */}
             <section
@@ -78,14 +60,13 @@ export default async function Home() {
                         LAMOUR WEDDING CONVENTION · VOL.2026
                     </div>
                     <h1 className="m-0 font-serif text-[clamp(40px,5.6vw,60px)] leading-[1.18] font-normal tracking-[-.02em] text-balance">
-                        결혼준비의 시작,
+                        대구·부산·포항·김해
                         <br />
-                        <span className="font-medium text-primary">라모르</span>{' '}
-                        웨딩박람회
+                        <span className="font-medium text-primary">웨딩박람회</span>
                     </h1>
                     <p className="m-0 max-w-[440px] text-[17px] leading-[1.75] text-body text-pretty">
-                        {fairs.map((f) => f.label).join('·')}에서 열리는 라모르
-                        웨딩박람회. 가까운 지역을 골라 무료로 사전예약하세요.
+                        결혼준비의 시작, 라모르 웨딩박람회. 가까운 지역을 골라
+                        무료로 사전예약하세요.
                     </p>
 
                     {/* One row per fair, linking straight to its page. */}
@@ -286,6 +267,8 @@ export default async function Home() {
                     </div>
                 </div>
             </section>
+
+            </main>
 
             <SiteFooter />
         </div>

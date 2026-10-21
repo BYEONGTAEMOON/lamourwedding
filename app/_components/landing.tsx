@@ -1,10 +1,11 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { Faq } from './faq';
 import { Partners } from './partners';
 import { ReservationProvider } from './reservation-context';
 import { ReviewSlider } from './review-slider';
 import { RsvpForm } from './rsvp-form';
-import { BenefitsSection, Eyebrow, SectionTitle, SiteFooter, WhySection } from './sections';
+import { BenefitsSection, Eyebrow, JsonLd, SectionTitle, SiteFooter, SiteHeader, WhySection } from './sections';
 import { StickyCta } from './sticky-cta';
 import { Ticker } from './ticker';
 import { GIFTS, NAV } from '../_content';
@@ -13,7 +14,8 @@ import { GIFTS, NAV } from '../_content';
 import heroImage from '@/public/assets/hero.png';
 import reviewMainImage from '@/public/assets/review-main.png';
 import { getSiteContent } from '@/lib/content';
-import type { RegionId } from '@/lib/regions';
+import { regionInfo, type RegionId } from '@/lib/regions';
+import { kstToday, regionJsonLd } from '@/lib/seo';
 import { googleMapEmbedUrl, naverMapUrl, tickerText } from '@/lib/site-content';
 
 function Stars({ className }: { className: string }) {
@@ -26,8 +28,8 @@ function Stars({ className }: { className: string }) {
 
 // The whole landing page for one region, served at "/[region]".
 export async function Landing({ region }: { region: RegionId }) {
-    const { event, hero, reviews, seats, location, form, ticker, partners } =
-        await getSiteContent(region);
+    const [content, today] = await Promise.all([getSiteContent(region), kstToday()]);
+    const { event, hero, reviews, seats, location, form, ticker, partners } = content;
     const seatsPct = `${Math.round(((seats.total - seats.left) / seats.total) * 100)}%`;
 
     return (
@@ -37,43 +39,30 @@ export async function Landing({ region }: { region: RegionId }) {
                     <Ticker items={ticker.entries.map(tickerText)} />
                 )}
 
-                <header className="sticky top-0 z-20 border-b border-line bg-cream/90 backdrop-blur-[10px]">
-                    <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 px-6 py-3.5">
-                        <a
-                            href="#top"
-                            className="flex items-baseline gap-2.5 text-ink"
-                        >
-                            <span className="font-display text-xl font-semibold tracking-[.18em] text-primary">
-                                {event.brand}
-                            </span>
-                            <span className="font-serif text-[13px] text-muted">
-                                웨딩박람회
-                            </span>
-                        </a>
-                        <nav className="flex flex-wrap gap-[22px] text-sm">
-                            {NAV.map((n) => (
-                                <a
-                                    key={n.href}
-                                    href={n.href}
-                                    className="text-body"
-                                >
-                                    {n.label}
-                                </a>
-                            ))}
-                        </nav>
-                        <a
-                            href="#rsvp"
-                            className="rounded-full bg-primary px-[18px] py-2.5 text-sm font-semibold text-white hover:bg-primary-dark hover:text-white"
-                        >
-                            사전예약
-                        </a>
-                    </div>
-                </header>
+                <SiteHeader brand={event.brand} nav={NAV} ctaHref="#rsvp" />
+
+                <JsonLd data={regionJsonLd(region, content, today)} />
+
+                <main>
+                {/* Breadcrumb: 홈 › 대구 웨딩박람회 */}
+                <nav aria-label="현재 위치" className="mx-auto max-w-[1200px] px-6 pt-6 text-[13px] text-muted">
+                    <ol className="m-0 flex list-none gap-1.5 p-0">
+                        <li>
+                            <Link href="/" className="text-muted hover:text-primary">
+                                전체 박람회
+                            </Link>
+                        </li>
+                        <li aria-hidden="true">›</li>
+                        <li aria-current="page" className="text-body">
+                            {regionInfo(region).label} 웨딩박람회
+                        </li>
+                    </ol>
+                </nav>
 
                 {/* Hero */}
                 <section
                     id="top"
-                    className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(min(100%,440px),1fr))] items-center gap-14 px-6 pt-14 pb-[72px]"
+                    className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(min(100%,440px),1fr))] items-center gap-14 px-6 pt-8 pb-[72px]"
                 >
                     <div className="flex flex-col gap-7">
                         <div className="font-display text-[13px] tracking-[.32em] text-mauve">
@@ -297,9 +286,9 @@ export async function Landing({ region }: { region: RegionId }) {
                                     <div className="font-display text-xs tracking-[.2em] text-gold">
                                         GIFT {String(i + 1).padStart(2, '0')}
                                     </div>
-                                    <div className="font-serif text-lg leading-[1.4]">
+                                    <h3 className="m-0 font-serif text-lg leading-[1.4] font-normal">
                                         {g.title}
-                                    </div>
+                                    </h3>
                                     <div className="text-sm leading-[1.6] text-muted">
                                         {g.desc}
                                     </div>
@@ -406,6 +395,8 @@ export async function Landing({ region }: { region: RegionId }) {
                         </div>
                     </div>
                 </section>
+
+                </main>
 
                 <SiteFooter />
 
