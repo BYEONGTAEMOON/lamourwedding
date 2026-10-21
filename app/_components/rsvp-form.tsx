@@ -135,7 +135,8 @@ export function RsvpForm({
   const [phone, setPhone] = useState("");
   const [month, setMonth] = useState<string | null>(null);
   const [day, setDay] = useState<string | null>(null);
-  const [agree, setAgree] = useState(false);
+  // The required consent starts checked; visitors can still untick it.
+  const [agree, setAgree] = useState(true);
   const [marketing, setMarketing] = useState(false);
   const [error, setError] = useState("");
   // Sent with the reservation so the server can drop instant bot submissions.
@@ -179,7 +180,7 @@ export function RsvpForm({
     setPhone("");
     setMonth(null);
     setDay(null);
-    setAgree(false);
+    setAgree(true);
     setMarketing(false);
   };
 
