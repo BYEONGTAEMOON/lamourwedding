@@ -1,6 +1,7 @@
 'use server';
 
 import { getSiteContent } from '@/lib/content';
+import { isBlocked } from '@/lib/blocklist';
 import { clientIp, isLimited, recordAttempt } from '@/lib/rate-limit';
 import { isRegion } from '@/lib/regions';
 import { hasRecentReservation, insertReservation } from '@/lib/reservations-db';
@@ -51,6 +52,8 @@ export async function createReservation(
             : `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
 
     try {
+        // Blocked numbers get the normal success screen but nothing is saved.
+        if (await isBlocked(phone)) return { ok: true };
         const ip = await clientIp();
         if (await isLimited('reservation', ip, RESERVATION_RULE)) {
             return { ok: false, error: '신청이 너무 많이 접수되었습니다. 잠시 후 다시 시도해 주세요.' };

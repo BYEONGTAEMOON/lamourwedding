@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { formatKst, RESERVATION_STATUSES, STATUS_LABELS, type Reservation, type ReservationStatus } from '@/lib/reservations';
 import { isRegion, regionInfo } from '@/lib/regions';
-import { deleteReservation, updateReservation } from '../../actions';
+import { deleteReservation, setPhoneBlocked, updateReservation } from '../../actions';
 
 const STATUS_STYLES: Record<ReservationStatus, string> = {
     new: 'bg-petal/30 text-primary-dark',
@@ -13,12 +13,12 @@ const STATUS_STYLES: Record<ReservationStatus, string> = {
     cancelled: 'bg-line text-muted',
 };
 
-function Row({ r }: { r: Reservation }) {
+function Row({ r, blocked }: { r: Reservation; blocked: boolean }) {
     const router = useRouter();
     const [pending, startTransition] = useTransition();
     const [status, setStatus] = useState(r.status);
     const [memo, setMemo] = useState(r.memo);
-    const [confirming, setConfirming] = useState(false);
+    const [confirming, setConfirming] = useState<'delete' | 'block' | null>(null);
     const [error, setError] = useState('');
 
     const run = (fn: () => Promise<{ ok: boolean; error?: string }>) =>
@@ -38,6 +38,7 @@ function Row({ r }: { r: Reservation }) {
             <td className="px-3 py-2.5 font-semibold whitespace-nowrap">{r.name}</td>
             <td className="px-3 py-2.5 whitespace-nowrap">
                 <a href={`tel:${r.phone.replace(/\D/g, '')}`} className="text-ink">{r.phone}</a>
+                {blocked && <span className="ml-1.5 rounded bg-ink px-1.5 py-0.5 text-[11px] font-semibold text-white">차단됨</span>}
             </td>
             <td className="px-3 py-2.5 whitespace-nowrap">{r.wedding_month}</td>
             <td className="px-3 py-2.5 whitespace-nowrap">{r.visit_day}</td>
@@ -73,25 +74,45 @@ function Row({ r }: { r: Reservation }) {
             </td>
             <td className="px-3 py-2.5 whitespace-nowrap">
                 {confirming ? (
-                    <span className="flex gap-1">
-                        <button type="button" className="cursor-pointer rounded bg-rose px-2 py-1 text-xs text-white" onClick={() => run(() => deleteReservation(r.id))}>
-                            삭제
+                    <span className="flex items-center gap-1">
+                        <span className="text-xs text-muted">{confirming === 'delete' ? '삭제할까요?' : '이 번호를 차단할까요?'}</span>
+                        <button
+                            type="button"
+                            className="cursor-pointer rounded bg-rose px-2 py-1 text-xs text-white"
+                            onClick={() => {
+                                setConfirming(null);
+                                run(() => (confirming === 'delete' ? deleteReservation(r.id) : setPhoneBlocked(r.phone, true)));
+                            }}
+                        >
+                            {confirming === 'delete' ? '삭제' : '차단'}
                         </button>
-                        <button type="button" className="cursor-pointer rounded border border-taupe bg-white px-2 py-1 text-xs" onClick={() => setConfirming(false)}>
+                        <button type="button" className="cursor-pointer rounded border border-taupe bg-white px-2 py-1 text-xs" onClick={() => setConfirming(null)}>
                             취소
                         </button>
                     </span>
                 ) : (
-                    <button type="button" className="cursor-pointer text-xs text-muted underline" onClick={() => setConfirming(true)}>
-                        삭제
-                    </button>
+                    <span className="flex gap-3">
+                        {blocked ? (
+                            <button type="button" className="cursor-pointer text-xs text-muted underline" onClick={() => run(() => setPhoneBlocked(r.phone, false))}>
+                                차단 해제
+                            </button>
+                        ) : (
+                            <button type="button" className="cursor-pointer text-xs text-muted underline" onClick={() => setConfirming('block')}>
+                                차단
+                            </button>
+                        )}
+                        <button type="button" className="cursor-pointer text-xs text-muted underline" onClick={() => setConfirming('delete')}>
+                            삭제
+                        </button>
+                    </span>
                 )}
             </td>
         </tr>
     );
 }
 
-export function ReservationTable({ rows }: { rows: Reservation[] }) {
+// `blocked` holds the blocked phone numbers as digits only.
+export function ReservationTable({ rows, blocked }: { rows: Reservation[]; blocked: string[] }) {
     if (!rows.length) {
         return <p className="rounded-md border border-line bg-paper p-8 text-center text-sm text-muted">신청 내역이 없습니다.</p>;
     }
@@ -109,7 +130,7 @@ export function ReservationTable({ rows }: { rows: Reservation[] }) {
                 </thead>
                 <tbody>
                     {rows.map((r) => (
-                        <Row key={r.id} r={r} />
+                        <Row key={r.id} r={r} blocked={blocked.includes(r.phone.replace(/\D/g, ''))} />
                     ))}
                 </tbody>
             </table>

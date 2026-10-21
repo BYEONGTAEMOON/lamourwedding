@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { requireAdmin } from '@/lib/auth';
+import { listBlocked } from '@/lib/blocklist';
 import { REGIONS } from '@/lib/regions';
 import { PAGE_SIZE, RESERVATION_STATUSES, STATUS_LABELS } from '@/lib/reservations';
 import { listReservations } from '@/lib/reservations-db';
 import { PageHeader } from '../../_components/ui';
 import { LoadingCard } from '../loading-card';
+import { Blocklist } from './blocklist';
 import { ReservationTable } from './reservation-table';
 
 type SearchParams = Promise<{ q?: string; status?: string; region?: string; page?: string }>;
@@ -27,9 +29,10 @@ async function Results({ searchParams }: { searchParams: SearchParams }) {
     const page = Math.max(1, Number(pageParam) || 1);
     const from = (page - 1) * PAGE_SIZE;
     // Session check and query run together; nothing renders until requireAdmin() passes.
-    const [, { rows, count }] = await Promise.all([
+    const [, { rows, count }, blocked] = await Promise.all([
         requireAdmin(),
         listReservations({ q, status, region }, from, from + PAGE_SIZE - 1),
+        listBlocked(),
     ]);
     const pages = Math.max(1, Math.ceil(count / PAGE_SIZE));
 
@@ -89,7 +92,7 @@ async function Results({ searchParams }: { searchParams: SearchParams }) {
                 )}
             </p>
 
-            <ReservationTable rows={rows} />
+            <ReservationTable rows={rows} blocked={blocked.map((b) => b.phone.replace(/\D/g, ''))} />
 
             {pages > 1 && (
                 <nav className="flex items-center justify-center gap-3 text-sm">
@@ -100,6 +103,8 @@ async function Results({ searchParams }: { searchParams: SearchParams }) {
                     {page < pages ? <Link href={href(page + 1)}>다음 →</Link> : <span className="text-muted">다음 →</span>}
                 </nav>
             )}
+
+            <Blocklist list={blocked} />
         </div>
     );
 }

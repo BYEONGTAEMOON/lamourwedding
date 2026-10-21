@@ -5,6 +5,7 @@ import { updateTag } from 'next/cache';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { requireAdmin } from '@/lib/auth';
+import { blockPhone, isValidPhone, unblockPhone } from '@/lib/blocklist';
 import { CONTENT_TAG, saveSection } from '@/lib/content';
 import { checkAdminPassword, MIN_PASSWORD_LENGTH, setAdminPassword } from '@/lib/admin-password';
 import { clearAttempts, clientIp, isLimited, recordAttempt } from '@/lib/rate-limit';
@@ -169,6 +170,19 @@ export async function deleteReservation(id: number): Promise<ActionResult> {
     await requireAdmin();
     try {
         await deleteReservationRow(id);
+        return { ok: true };
+    } catch (e) {
+        return fail(e);
+    }
+}
+
+/* ---------- Blocked phone numbers ---------- */
+
+export async function setPhoneBlocked(phone: string, blocked: boolean): Promise<ActionResult> {
+    await requireAdmin();
+    if (!isValidPhone(phone)) return { ok: false, error: '휴대폰 번호를 정확히 입력해 주세요.' };
+    try {
+        await (blocked ? blockPhone(phone) : unblockPhone(phone));
         return { ok: true };
     } catch (e) {
         return fail(e);
