@@ -168,6 +168,48 @@ export async function Landing({ region }: { region: RegionId }) {
 
                 <BenefitsSection title={`박람회 등록 ${seats.total}팀에게만`} />
 
+                {/* RSVP */}
+                <section id="rsvp" className="bg-primary">
+                    <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-14 px-6 py-24">
+                        <div className="flex flex-col gap-5 text-white/90">
+                            <div className="font-display text-[30px] text-champagne italic">
+                                You are invited
+                            </div>
+                            <h2 className="m-0 font-serif text-[clamp(32px,4vw,48px)] leading-[1.3] font-normal text-white">
+                                박람회 방문을
+                                <br />
+                                예약하세요
+                            </h2>
+                            <p className="m-0 max-w-[400px] text-base leading-[1.75] text-white/80">
+                                사전예약 고객에게만 이번 주 한정 혜택과 방문
+                                사은품이 적용됩니다. 예약 후 담당 플래너가 확인
+                                연락을 드립니다.
+                            </p>
+                            <ul className="m-0 mt-2 flex list-none flex-col gap-2.5 p-0 text-[15px] text-white/90">
+                                {[
+                                    '입장료 무료',
+                                    '방문사은픔 증정',
+                                    '개인정보 안전 보호',
+                                ].map((item) => (
+                                    <li key={item} className="flex gap-2.5">
+                                        <span className="text-champagne">
+                                            ✓
+                                        </span>
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                        <div className="rounded bg-paper p-[clamp(24px,4vw,40px)] shadow-[0_30px_60px_-30px_rgba(0,0,0,.5)]">
+                            <RsvpForm
+                                region={region}
+                                weddingMonths={form.weddingMonths}
+                                visitDays={form.visitDays}
+                            />
+                        </div>
+                    </div>
+                </section>
+
                 {/* Partners */}
                 <section
                     id="partners"
@@ -264,48 +306,6 @@ export async function Landing({ region }: { region: RegionId }) {
                                 </div>
                             </div>
                         ))}
-                    </div>
-                </section>
-
-                {/* RSVP */}
-                <section id="rsvp" className="bg-primary">
-                    <div className="mx-auto grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-14 px-6 py-24">
-                        <div className="flex flex-col gap-5 text-white/90">
-                            <div className="font-display text-[30px] text-champagne italic">
-                                You are invited
-                            </div>
-                            <h2 className="m-0 font-serif text-[clamp(32px,4vw,48px)] leading-[1.3] font-normal text-white">
-                                박람회 방문을
-                                <br />
-                                예약하세요
-                            </h2>
-                            <p className="m-0 max-w-[400px] text-base leading-[1.75] text-white/80">
-                                사전예약 고객에게만 이번 주 한정 혜택과 방문
-                                사은품이 적용됩니다. 예약 후 담당 플래너가 확인
-                                연락을 드립니다.
-                            </p>
-                            <ul className="m-0 mt-2 flex list-none flex-col gap-2.5 p-0 text-[15px] text-white/90">
-                                {[
-                                    '입장료 무료',
-                                    '방문사은픔 증정',
-                                    '개인정보 안전 보호',
-                                ].map((item) => (
-                                    <li key={item} className="flex gap-2.5">
-                                        <span className="text-champagne">
-                                            ✓
-                                        </span>
-                                        {item}
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                        <div className="rounded bg-paper p-[clamp(24px,4vw,40px)] shadow-[0_30px_60px_-30px_rgba(0,0,0,.5)]">
-                            <RsvpForm
-                                region={region}
-                                weddingMonths={form.weddingMonths}
-                                visitDays={form.visitDays}
-                            />
-                        </div>
                     </div>
                 </section>
 
