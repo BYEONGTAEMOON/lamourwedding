@@ -10,11 +10,12 @@ import type { SiteContent } from './site-content';
 export const SITE_URL = 'https://www.lamourwedding.app';
 export const SITE_NAME = '라모르 웨딩박람회';
 
+// Brand card used as the share image on every page.
 export const DEFAULT_OG_IMAGE = {
-    url: '/og/lamour-wedding-fair.jpg',
+    url: '/og/lamour-wedding.jpg',
     width: 1200,
     height: 630,
-    alt: '대구·부산·포항·김해 라모르 웨딩박람회',
+    alt: "L'AMOUR WEDDING 라모르 웨딩박람회",
 };
 
 // Business details as printed in the site footer.
@@ -78,7 +79,7 @@ export function regionDescription(region: RegionId, { event, location }: SiteCon
     return `${label} 웨딩박람회${when}${where}. 웨딩홀·스드메·허니문·예물 등 결혼 준비 상담과 사전예약 혜택을 라모르 웨딩박람회에서 확인하세요.`;
 }
 
-// Share image for a region: the hero uploaded from the admin, else the site default.
+// Photo for a region's Event markup: the hero uploaded from the admin, if any.
 export const regionImage = ({ hero }: SiteContent) =>
     hero.image.startsWith('https://') ? hero.image : undefined;
 
