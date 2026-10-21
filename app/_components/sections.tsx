@@ -93,7 +93,7 @@ export function BenefitsSection({ title }: { title: React.ReactNode }) {
                     {BENEFITS.map((b, i) => (
                         <div
                             key={b.title}
-                            className="grid grid-cols-[minmax(150px,220px)_minmax(0,1fr)] items-baseline gap-x-10 gap-y-6 border-b border-line py-8"
+                            className="grid grid-cols-1 gap-y-3 border-b border-line py-7 sm:grid-cols-[minmax(150px,220px)_minmax(0,1fr)] sm:items-baseline sm:gap-x-10 sm:gap-y-6 sm:py-8"
                         >
                             <div className="font-serif text-[28px] text-primary">
                                 {b.value}
@@ -105,7 +105,7 @@ export function BenefitsSection({ title }: { title: React.ReactNode }) {
                                     </span>
                                     {b.title}
                                 </div>
-                                <div className="text-[15px] leading-[1.7] text-body">
+                                <div className="text-[15px] leading-[1.7] break-keep text-body">
                                     {b.details.map(([label, bold], j) => (
                                         <span key={label}>
                                             {j > 0 && ' · '}
