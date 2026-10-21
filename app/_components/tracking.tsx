@@ -19,8 +19,27 @@ declare global {
     }
 }
 
-// Reports a completed reservation (Meta "Lead", GA4 "generate_lead", GTM "reservation_submit").
+// Query flag on the completion URL (e.g. /daegu?rsvp=done), used by URL-based ad conversions.
+export const RSVP_DONE_PARAM = 'rsvp';
+
+const setRsvpDone = (done: boolean) => {
+    const url = new URL(window.location.href);
+    if (done) url.searchParams.set(RSVP_DONE_PARAM, 'done');
+    else url.searchParams.delete(RSVP_DONE_PARAM);
+    window.history.replaceState(window.history.state, '', url);
+};
+
+// Drops a leftover ?rsvp=done (reload, shared link) so it isn't counted as a new completion.
+export function clearRsvpDone() {
+    if (new URLSearchParams(window.location.search).has(RSVP_DONE_PARAM)) setRsvpDone(false);
+}
+
+// Reports a completed reservation. The URL becomes /<region>?rsvp=done first, then a Pixel
+// PageView marks that URL (for "URL contains" custom conversions per region) and the same
+// Meta "Lead" fires for every region, alongside GA4 "generate_lead" and GTM "reservation_submit".
 export function trackReservation(region: string) {
+    setRsvpDone(true);
+    window.fbq?.('track', 'PageView');
     window.fbq?.('track', 'Lead', { content_name: region });
     window.gtag?.('event', 'generate_lead', { region });
     window.dataLayer?.push({ event: 'reservation_submit', region });

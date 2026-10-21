@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { MARKETING_NOTICE, PRIVACY_NOTICE, type ConsentNotice } from "../_content";
 import { createReservation } from "../actions";
 import { useReservation } from "./reservation-context";
-import { trackReservation } from "./tracking";
+import { clearRsvpDone, trackReservation } from "./tracking";
 
 const formatPhone = (v: string) => {
   const d = v.replace(/\D/g, "").slice(0, 11);
@@ -144,6 +144,7 @@ export function RsvpForm({
   const shownAt = useRef(0);
   useEffect(() => {
     shownAt.current = performance.now();
+    clearRsvpDone();
   }, []);
 
   const onSubmit = (e: React.FormEvent) => {
@@ -179,6 +180,7 @@ export function RsvpForm({
   };
 
   const reset = () => {
+    clearRsvpDone();
     setSubmitted(false);
     setName("");
     setPhone("");
