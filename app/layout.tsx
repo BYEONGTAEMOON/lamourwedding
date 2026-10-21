@@ -1,7 +1,9 @@
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
 import { Noto_Serif_KR, Playfair_Display } from 'next/font/google';
+import { Suspense } from 'react';
 import { DEFAULT_OG_IMAGE, SITE_NAME, SITE_URL } from '@/lib/seo';
+import { Tracking } from './_components/tracking';
 import './globals.css';
 
 const notoSerifKr = Noto_Serif_KR({
@@ -51,6 +53,10 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
                 />
             </head>
             <body>
+                {/* Tracking reads the URL (to skip /admin), so it streams in after the static shell. */}
+                <Suspense fallback={null}>
+                    <Tracking />
+                </Suspense>
                 {children}
                 <Analytics />
             </body>
