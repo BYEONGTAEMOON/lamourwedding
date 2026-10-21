@@ -1,7 +1,9 @@
 'use server';
 
+import { after } from 'next/server';
 import { getSiteContent } from '@/lib/content';
 import { isBlocked } from '@/lib/blocklist';
+import { notifyNewReservation } from '@/lib/notify';
 import { clientIp, isLimited, recordAttempt } from '@/lib/rate-limit';
 import { isRegion } from '@/lib/regions';
 import { hasRecentReservation, insertReservation } from '@/lib/reservations-db';
@@ -66,14 +68,17 @@ export async function createReservation(
             };
         }
         await recordAttempt('reservation', ip, RESERVATION_RULE);
-        await insertReservation({
+        const reservation = {
             region: input.region,
             name,
             phone,
             wedding_month: input.weddingMonth,
             visit_day: input.visitDay,
             agree_marketing: input.agreeMarketing === true,
-        });
+        };
+        await insertReservation(reservation);
+        // Email goes out after the visitor already sees the success screen.
+        after(() => notifyNewReservation(reservation));
     } catch (e) {
         console.error('예약 저장 실패:', e instanceof Error ? e.message : e);
         return { ok: false, error: '예약 저장 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.' };
