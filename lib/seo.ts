@@ -50,7 +50,7 @@ export function pageMetadata({ title, description, path, ogTitle, ogDescription,
     return {
         title: { absolute: title },
         description,
-        alternates: { canonical: path },
+        alternates: { canonical: path, types: { 'application/rss+xml': '/rss.xml' } },
         openGraph: {
             type: 'website',
             locale: 'ko_KR',
