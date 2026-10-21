@@ -11,10 +11,15 @@ import type { NewReservation } from './reservations-db';
 const escapeHtml = (s: string) =>
     s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
-export async function notifyNewReservation(r: NewReservation) {
+export type NotifyResult = { ok: true; to: string[] } | { ok: false; error: string };
+
+// Resolves with what happened instead of throwing, so the admin test button can show it.
+export async function notifyNewReservation(r: NewReservation): Promise<NotifyResult> {
     const apiKey = process.env.RESEND_API_KEY;
     const to = process.env.NOTIFY_EMAIL?.split(',').map((s) => s.trim()).filter(Boolean);
-    if (!apiKey || !to?.length) return;
+    if (!apiKey || !to?.length) {
+        return { ok: false, error: 'RESEND_API_KEY 또는 NOTIFY_EMAIL 환경변수가 없습니다. Vercel에 넣은 뒤 다시 배포(Redeploy)했는지 확인하세요.' };
+    }
 
     const region = isRegion(r.region) ? regionInfo(r.region).label : r.region;
     // Vercel sets this to the production domain when system environment variables are exposed.
@@ -55,8 +60,13 @@ export async function notifyNewReservation(r: NewReservation) {
                 text: rows.map(([k, v]) => `${k}: ${v}`).join('\n'),
             }),
         });
-        if (!res.ok) console.error('신청 알림 메일 실패:', res.status, await res.text());
+        if (res.ok) return { ok: true, to };
+        const error = `Resend 오류 ${res.status}: ${await res.text()}`;
+        console.error('신청 알림 메일 실패:', error);
+        return { ok: false, error };
     } catch (e) {
-        console.error('신청 알림 메일 실패:', e instanceof Error ? e.message : e);
+        const error = e instanceof Error ? e.message : String(e);
+        console.error('신청 알림 메일 실패:', error);
+        return { ok: false, error };
     }
 }

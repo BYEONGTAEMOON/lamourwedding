@@ -6,6 +6,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { requireAdmin } from '@/lib/auth';
 import { blockPhone, isValidPhone, unblockPhone } from '@/lib/blocklist';
+import { notifyNewReservation } from '@/lib/notify';
 import { CONTENT_TAG, saveSection } from '@/lib/content';
 import { checkAdminPassword, MIN_PASSWORD_LENGTH, setAdminPassword } from '@/lib/admin-password';
 import { clearAttempts, clientIp, isLimited, recordAttempt } from '@/lib/rate-limit';
@@ -187,4 +188,20 @@ export async function setPhoneBlocked(phone: string, blocked: boolean): Promise<
     } catch (e) {
         return fail(e);
     }
+}
+
+/* ---------- Notification email ---------- */
+
+// Sends a sample notification so the admin can see whether email works and, if not, why.
+export async function sendTestNotification(): Promise<ActionResult<string>> {
+    await requireAdmin();
+    const res = await notifyNewReservation({
+        region: 'daegu',
+        name: '테스트',
+        phone: '010-0000-0000',
+        wedding_month: '알림 메일 테스트',
+        visit_day: '테스트',
+        agree_marketing: false,
+    });
+    return res.ok ? { ok: true, data: res.to.join(', ') } : { ok: false, error: res.error };
 }

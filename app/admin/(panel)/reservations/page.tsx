@@ -8,6 +8,7 @@ import { listReservations } from '@/lib/reservations-db';
 import { PageHeader } from '../../_components/ui';
 import { LoadingCard } from '../loading-card';
 import { Blocklist } from './blocklist';
+import { NotifyTest } from './notify-test';
 import { ReservationTable } from './reservation-table';
 
 type SearchParams = Promise<{ q?: string; status?: string; region?: string; page?: string }>;
@@ -105,6 +106,7 @@ async function Results({ searchParams }: { searchParams: SearchParams }) {
             )}
 
             <Blocklist list={blocked} />
+            <NotifyTest />
         </div>
     );
 }
