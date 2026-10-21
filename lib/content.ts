@@ -54,6 +54,27 @@ export async function getSiteContent(region: RegionId): Promise<SiteContent> {
 // Admin editors: always read the latest stored values.
 export const getSiteContentFresh = readContent;
 
+// When a region's content was last saved from the admin (ISO time), for RSS pubDate and
+// sitemap lastmod. Null in local storage mode or before anything was saved.
+export async function getContentUpdatedAt(region: RegionId): Promise<string | null> {
+    'use cache';
+    cacheLife('max');
+    cacheTag(CONTENT_TAG);
+    if (!isSupabaseConfigured) return null;
+    const { data, error } = await supabaseAdmin()
+        .from('site_content')
+        .select('updated_at')
+        .like('key', `${region}:%`)
+        .order('updated_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+    if (error) {
+        console.error('site_content 수정 시각 조회 실패:', error.message);
+        return null;
+    }
+    return data?.updated_at ?? null;
+}
+
 export async function saveSection<K extends SectionKey>(
     region: RegionId,
     key: K,

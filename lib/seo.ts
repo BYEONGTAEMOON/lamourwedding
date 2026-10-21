@@ -9,6 +9,8 @@ import type { SiteContent } from './site-content';
 // Canonical origin. lamourwedding.app and lamourwedding.vercel.app redirect here.
 export const SITE_URL = 'https://www.lamourwedding.app';
 export const SITE_NAME = '라모르 웨딩박람회';
+// Date the site went live; stands in for "last updated" where nothing was saved yet.
+export const SITE_PUBLISHED = '2026-10-20T00:00:00+09:00';
 
 // Brand card used as the share image on every page.
 export const DEFAULT_OG_IMAGE = {
