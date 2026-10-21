@@ -4,21 +4,25 @@ import { usePathname } from 'next/navigation';
 import Script from 'next/script';
 import { useEffect, useRef } from 'react';
 
-// Google Tag Manager and Meta Pixel. Mounted once in the root layout; skipped on the
+// Google Tag Manager, Google Analytics 4 and Meta Pixel. Mounted once in the root layout; skipped on the
 // admin so staff visits don't count as traffic.
 const GTM_ID = 'GTM-52NBVX99';
+// GA4 counts client-side navigations itself (enhanced measurement: history changes).
+const GA_ID = 'G-XWPJH4GMLF';
 const META_PIXEL_ID = '147601669516017';
 
 declare global {
     interface Window {
-        dataLayer?: Record<string, unknown>[];
+        dataLayer?: unknown[];
+        gtag?: (...args: unknown[]) => void;
         fbq?: (...args: unknown[]) => void;
     }
 }
 
-// Reports a completed reservation to both tools (Meta "Lead", GTM "reservation_submit").
+// Reports a completed reservation (Meta "Lead", GA4 "generate_lead", GTM "reservation_submit").
 export function trackReservation(region: string) {
     window.fbq?.('track', 'Lead', { content_name: region });
+    window.gtag?.('event', 'generate_lead', { region });
     window.dataLayer?.push({ event: 'reservation_submit', region });
 }
 
@@ -45,6 +49,13 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','${GTM_ID}');`}
+            </Script>
+            <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="afterInteractive" />
+            <Script id="ga4" strategy="afterInteractive">
+                {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GA_ID}');`}
             </Script>
             <Script id="meta-pixel" strategy="afterInteractive">
                 {`!function(f,b,e,v,n,t,s)
