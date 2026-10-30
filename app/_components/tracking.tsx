@@ -3,13 +3,14 @@
 import { usePathname } from 'next/navigation';
 import Script from 'next/script';
 import { useEffect, useRef } from 'react';
+import { matchingFields } from '@/lib/meta-matching';
+import { isRegion } from '@/lib/regions';
+import { sanitizeSource, SOURCE_KEYS, type ReservationSource } from '@/lib/reservations';
+import { GA_ID, GTM_ID, META_PIXEL_ID } from '@/lib/tracking-ids';
 
-// Google Tag Manager, Google Analytics 4 and Meta Pixel. Mounted once in the root layout; skipped on the
-// admin so staff visits don't count as traffic.
-const GTM_ID = 'GTM-52NBVX99';
-// GA4 counts client-side navigations itself (enhanced measurement: history changes).
-const GA_ID = 'G-XWPJH4GMLF';
-const META_PIXEL_ID = '147601669516017';
+// Google Tag Manager, Google Analytics 4 and Meta Pixel. Mounted once in the root layout;
+// skipped on the admin so staff visits don't count as traffic. GA4 counts client-side
+// navigations itself (enhanced measurement: history changes).
 
 declare global {
     interface Window {
@@ -34,31 +35,60 @@ export function clearRsvpDone() {
     if (new URLSearchParams(window.location.search).has(RSVP_DONE_PARAM)) setRsvpDone(false);
 }
 
-const DOUBLE_SURNAMES = ['남궁', '황보', '제갈', '사공', '선우', '서문', '독고', '동방'];
+/* ---------- Ad attribution ---------- */
 
-// Meta advanced matching fields for a Korean visitor. The pixel SHA-256 hashes them
-// in the browser before sending. "홍길동", "010-1234-5678" → ln 홍, fn 길동, ph 821012345678.
-function matchingData(name: string, phone: string) {
-    const surnameLength = name.length > 2 && DOUBLE_SURNAMES.includes(name.slice(0, 2)) ? 2 : 1;
-    const digits = phone.replace(/\D/g, '');
-    return {
-        ln: name.slice(0, surnameLength),
-        fn: name.slice(surnameLength),
-        ph: digits.startsWith('0') ? `82${digits.slice(1)}` : digits,
-        country: 'kr',
-    };
+// The ad that brought the visitor (last click wins), kept for 30 days so it still
+// applies when they come back to book later.
+const SOURCE_STORAGE_KEY = 'lamour_source';
+const SOURCE_DAYS = 30;
+
+function captureSource() {
+    const params = new URLSearchParams(window.location.search);
+    const found = SOURCE_KEYS.filter((k) => k !== 'landing' && params.get(k));
+    if (!found.length) return;
+    const source: ReservationSource = { landing: window.location.pathname };
+    for (const k of found) source[k] = params.get(k)!;
+    try {
+        localStorage.setItem(SOURCE_STORAGE_KEY, JSON.stringify({ savedAt: Date.now(), source }));
+    } catch {
+        // Storage blocked (private mode); the reservation is just saved without a source.
+    }
 }
+
+export function storedSource(): ReservationSource {
+    try {
+        const saved = JSON.parse(localStorage.getItem(SOURCE_STORAGE_KEY) ?? 'null');
+        if (!saved || Date.now() - saved.savedAt > SOURCE_DAYS * 86400_000) return {};
+        return sanitizeSource(saved.source);
+    } catch {
+        return {};
+    }
+}
+
+// Shared by the browser Lead and the server's Conversions API Lead so Meta counts one.
+export const newEventId = () =>
+    typeof crypto.randomUUID === 'function' ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+
+// A region page view ("/daegu" …), reported as ViewContent for retargeting audiences.
+const regionOf = (pathname: string) => {
+    const slug = pathname.slice(1);
+    return isRegion(slug) ? slug : null;
+};
 
 // Reports a completed reservation. The URL becomes /<region>?rsvp=done first, then a Pixel
 // PageView marks that URL (for "URL contains" custom conversions per region) and the same
 // Meta "Lead" fires for every region, alongside GA4 "generate_lead" and GTM "reservation_submit".
 // The visitor's name and phone are only known now, so the pixel is re-initialised with
 // advanced matching data right before those events.
-export function trackReservation(region: string, visitor: { name: string; phone: string }) {
+export function trackReservation(
+    region: string,
+    visitor: { name: string; phone: string },
+    eventId: string,
+) {
     setRsvpDone(true);
-    window.fbq?.('init', META_PIXEL_ID, matchingData(visitor.name, visitor.phone));
+    window.fbq?.('init', META_PIXEL_ID, matchingFields(visitor.name, visitor.phone));
     window.fbq?.('track', 'PageView');
-    window.fbq?.('track', 'Lead', { content_name: region });
+    window.fbq?.('track', 'Lead', { content_name: region }, { eventID: eventId });
     window.gtag?.('event', 'generate_lead', { region });
     window.dataLayer?.push({ event: 'reservation_submit', region });
 }
@@ -67,13 +97,16 @@ export function Tracking() {
     const pathname = usePathname();
     const first = useRef(true);
 
-    // The pixel's snippet counts the first page; client-side navigations need their own PageView.
     useEffect(() => {
+        captureSource();
+        // The pixel's snippet counts the first page; client-side navigations need their own events.
         if (first.current) {
             first.current = false;
             return;
         }
         window.fbq?.('track', 'PageView');
+        const region = regionOf(pathname);
+        if (region) window.fbq?.('track', 'ViewContent', { content_name: region, content_category: 'wedding_fair' });
     }, [pathname]);
 
     if (pathname.startsWith('/admin')) return null;
@@ -104,7 +137,8 @@ t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '${META_PIXEL_ID}');
-fbq('track', 'PageView');`}
+fbq('track', 'PageView');
+${regionOf(pathname) ? `fbq('track', 'ViewContent', { content_name: '${regionOf(pathname)}', content_category: 'wedding_fair' });` : ''}`}
             </Script>
             {/* Fallbacks for visitors without JavaScript. */}
             <noscript>

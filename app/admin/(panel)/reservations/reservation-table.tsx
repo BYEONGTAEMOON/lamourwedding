@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
-import { formatKst, RESERVATION_STATUSES, STATUS_LABELS, type Reservation, type ReservationStatus } from '@/lib/reservations';
+import { formatKst, RESERVATION_STATUSES, sourceLabel, STATUS_LABELS, type Reservation, type ReservationStatus } from '@/lib/reservations';
 import { isRegion, regionInfo } from '@/lib/regions';
 import { deleteReservation, setPhoneBlocked, updateReservation } from '../../actions';
 
@@ -43,6 +43,12 @@ function Row({ r, blocked }: { r: Reservation; blocked: boolean }) {
             <td className="px-3 py-2.5 whitespace-nowrap">{r.wedding_month}</td>
             <td className="px-3 py-2.5 whitespace-nowrap">{r.visit_day}</td>
             <td className="px-3 py-2.5 text-center">{r.agree_marketing ? '동의' : '-'}</td>
+            <td
+                className="max-w-[160px] truncate px-3 py-2.5 text-xs text-muted"
+                title={r.source ? Object.entries(r.source).map(([k, v]) => `${k}: ${v}`).join('\n') : undefined}
+            >
+                {sourceLabel(r.source) || '-'}
+            </td>
             <td className="px-3 py-2.5">
                 <select
                     value={status}
@@ -121,7 +127,7 @@ export function ReservationTable({ rows, blocked }: { rows: Reservation[]; block
             <table className="w-full border-collapse text-sm">
                 <thead>
                     <tr className="border-b border-line bg-sand text-left text-xs text-muted">
-                        {['신청일시', '지역', '이름', '연락처', '결혼 예정', '방문 희망일', '마케팅', '상태', '메모', ''].map((h, i) => (
+                        {['신청일시', '지역', '이름', '연락처', '결혼 예정', '방문 희망일', '마케팅', '유입', '상태', '메모', ''].map((h, i) => (
                             <th key={i} className="px-3 py-2.5 font-semibold whitespace-nowrap">
                                 {h}
                             </th>

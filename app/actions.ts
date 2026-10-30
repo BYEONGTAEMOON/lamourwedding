@@ -1,12 +1,16 @@
 'use server';
 
+import { cookies, headers } from 'next/headers';
 import { after } from 'next/server';
 import { getSiteContent } from '@/lib/content';
 import { isBlocked } from '@/lib/blocklist';
+import { sendMetaLead } from '@/lib/meta-capi';
 import { notifyNewReservation } from '@/lib/notify';
 import { clientIp, isLimited, recordAttempt } from '@/lib/rate-limit';
 import { isRegion } from '@/lib/regions';
+import { sanitizeSource, type ReservationSource } from '@/lib/reservations';
 import { hasRecentReservation, insertReservation } from '@/lib/reservations-db';
+import { SITE_URL } from '@/lib/seo';
 
 export type ReservationInput = {
     region: string;
@@ -18,6 +22,9 @@ export type ReservationInput = {
     agreeMarketing: boolean;
     website?: string; // honeypot: real visitors never fill this hidden field
     elapsedMs?: number; // time between the form appearing and submit
+    eventId?: string; // shared with the browser Pixel Lead for deduplication
+    source?: ReservationSource; // UTM tags / ad click IDs from the landing URL
+    pageUrl?: string;
 };
 
 // Bots post the form instantly; people need a few seconds to fill it in.
@@ -68,6 +75,7 @@ export async function createReservation(
             };
         }
         await recordAttempt('reservation', ip, RESERVATION_RULE);
+        const source = sanitizeSource(input.source);
         const reservation = {
             region: input.region,
             name,
@@ -75,10 +83,36 @@ export async function createReservation(
             wedding_month: input.weddingMonth,
             visit_day: input.visitDay,
             agree_marketing: input.agreeMarketing === true,
+            source: Object.keys(source).length ? source : null,
         };
         await insertReservation(reservation);
-        // Email goes out after the visitor already sees the success screen.
-        after(() => notifyNewReservation(reservation));
+
+        // Request details for the Conversions API, read while the request is still open.
+        const [h, jar] = await Promise.all([headers(), cookies()]);
+        const fbclid = source.fbclid;
+        const fbc = jar.get('_fbc')?.value ?? (fbclid ? `fb.1.${Date.now()}.${fbclid}` : undefined);
+        const pageUrl = String(input.pageUrl ?? '');
+        const sourceUrl = pageUrl.startsWith(SITE_URL) ? pageUrl.slice(0, 500) : `${SITE_URL}/${input.region}`;
+        const eventId = String(input.eventId ?? '').slice(0, 100);
+
+        // Email and the server-side Meta Lead go out after the visitor sees the success screen.
+        after(() =>
+            Promise.all([
+                notifyNewReservation(reservation),
+                eventId &&
+                    sendMetaLead({
+                        eventId,
+                        region: input.region,
+                        name,
+                        phone,
+                        sourceUrl,
+                        ip,
+                        userAgent: h.get('user-agent') ?? '',
+                        fbc,
+                        fbp: jar.get('_fbp')?.value,
+                    }),
+            ]),
+        );
     } catch (e) {
         console.error('예약 저장 실패:', e instanceof Error ? e.message : e);
         return { ok: false, error: '예약 저장 중 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.' };

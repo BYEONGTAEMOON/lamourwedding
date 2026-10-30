@@ -1,6 +1,6 @@
 import { isAdmin } from '@/lib/auth';
 import { isRegion, regionInfo } from '@/lib/regions';
-import { formatKst, STATUS_LABELS, type Reservation } from '@/lib/reservations';
+import { formatKst, SOURCE_KEYS, STATUS_LABELS, type Reservation } from '@/lib/reservations';
 import { allReservations } from '@/lib/reservations-db';
 
 const csvCell = (v: string) => {
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
         return new Response(e instanceof Error ? e.message : 'Error', { status: 500 });
     }
 
-    const header = ['신청일시', '지역', '이름', '연락처', '결혼 예정', '방문 희망일', '마케팅 동의', '상태', '메모'];
+    const header = ['신청일시', '지역', '이름', '연락처', '결혼 예정', '방문 희망일', '마케팅 동의', '상태', '메모', ...SOURCE_KEYS];
     const lines = rows.map((r) =>
         [
             formatKst(r.created_at),
@@ -38,6 +38,7 @@ export async function GET(request: Request) {
             r.agree_marketing ? '동의' : '',
             STATUS_LABELS[r.status] ?? r.status,
             r.memo,
+            ...SOURCE_KEYS.map((k) => r.source?.[k] ?? ''),
         ]
             .map(csvCell)
             .join(','),

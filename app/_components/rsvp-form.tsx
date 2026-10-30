@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { MARKETING_NOTICE, PRIVACY_NOTICE, type ConsentNotice } from "../_content";
 import { createReservation } from "../actions";
 import { useReservation } from "./reservation-context";
-import { clearRsvpDone, trackReservation } from "./tracking";
+import { clearRsvpDone, newEventId, storedSource, trackReservation } from "./tracking";
 
 const formatPhone = (v: string) => {
   const d = v.replace(/\D/g, "").slice(0, 11);
@@ -160,6 +160,7 @@ export function RsvpForm({
     if (err) return;
 
     startTransition(async () => {
+      const eventId = newEventId();
       const res = await createReservation({
         region,
         name,
@@ -170,10 +171,13 @@ export function RsvpForm({
         agreeMarketing: marketing,
         website,
         elapsedMs: Math.round(performance.now() - shownAt.current),
+        eventId,
+        source: storedSource(),
+        pageUrl: window.location.href,
       });
       if (res.ok) {
         setSubmitted(true);
-        trackReservation(region, { name, phone });
+        trackReservation(region, { name, phone }, eventId);
       }
       else setError(res.error);
     });

@@ -9,7 +9,7 @@ import { isSupabaseConfigured, supabaseAdmin } from './supabase';
 export type ReservationFilter = { q?: string; status?: string; region?: string; since?: string };
 export type NewReservation = Pick<
     Reservation,
-    'region' | 'name' | 'phone' | 'wedding_month' | 'visit_day' | 'agree_marketing'
+    'region' | 'name' | 'phone' | 'wedding_month' | 'visit_day' | 'agree_marketing' | 'source'
 >;
 export type ReservationPatch = Partial<Pick<Reservation, 'status' | 'memo'>>;
 
@@ -130,6 +130,16 @@ export async function insertReservation(input: NewReservation) {
     const { error } = await supabaseAdmin()
         .from('reservations')
         .insert({ ...input, agree_privacy: true });
+    // PGRST204: the "source" column hasn't been added yet (supabase/schema.sql). Keep
+    // taking reservations without it rather than failing.
+    if (error?.code === 'PGRST204' && input.source) {
+        const withoutSource = { ...input, agree_privacy: true };
+        delete withoutSource.source;
+        const retry = await supabaseAdmin().from('reservations').insert(withoutSource);
+        if (retry.error) throw new Error(retry.error.message);
+        console.error('reservations.source 칸이 없어 광고 출처 없이 저장했습니다. supabase/schema.sql을 실행하세요.');
+        return;
+    }
     if (error) throw new Error(error.message);
 }
 

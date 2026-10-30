@@ -30,6 +30,9 @@ create index if not exists reservations_created_at_idx
 -- For databases created before regions were added.
 alter table public.reservations add column if not exists region text not null default 'daegu';
 
+-- Ad attribution (UTM tags, fbclid/gclid, landing page) captured with each reservation.
+alter table public.reservations add column if not exists source jsonb;
+
 -- RLS on with no policies: the anon key can't read or write these tables.
 -- The site accesses them only from the server with the service role key.
 alter table public.site_content enable row level security;
