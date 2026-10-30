@@ -173,7 +173,7 @@ export function RsvpForm({
       });
       if (res.ok) {
         setSubmitted(true);
-        trackReservation(region);
+        trackReservation(region, { name, phone });
       }
       else setError(res.error);
     });

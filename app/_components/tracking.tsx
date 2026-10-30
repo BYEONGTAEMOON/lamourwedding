@@ -34,11 +34,29 @@ export function clearRsvpDone() {
     if (new URLSearchParams(window.location.search).has(RSVP_DONE_PARAM)) setRsvpDone(false);
 }
 
+const DOUBLE_SURNAMES = ['남궁', '황보', '제갈', '사공', '선우', '서문', '독고', '동방'];
+
+// Meta advanced matching fields for a Korean visitor. The pixel SHA-256 hashes them
+// in the browser before sending. "홍길동", "010-1234-5678" → ln 홍, fn 길동, ph 821012345678.
+function matchingData(name: string, phone: string) {
+    const surnameLength = name.length > 2 && DOUBLE_SURNAMES.includes(name.slice(0, 2)) ? 2 : 1;
+    const digits = phone.replace(/\D/g, '');
+    return {
+        ln: name.slice(0, surnameLength),
+        fn: name.slice(surnameLength),
+        ph: digits.startsWith('0') ? `82${digits.slice(1)}` : digits,
+        country: 'kr',
+    };
+}
+
 // Reports a completed reservation. The URL becomes /<region>?rsvp=done first, then a Pixel
 // PageView marks that URL (for "URL contains" custom conversions per region) and the same
 // Meta "Lead" fires for every region, alongside GA4 "generate_lead" and GTM "reservation_submit".
-export function trackReservation(region: string) {
+// The visitor's name and phone are only known now, so the pixel is re-initialised with
+// advanced matching data right before those events.
+export function trackReservation(region: string, visitor: { name: string; phone: string }) {
     setRsvpDone(true);
+    window.fbq?.('init', META_PIXEL_ID, matchingData(visitor.name, visitor.phone));
     window.fbq?.('track', 'PageView');
     window.fbq?.('track', 'Lead', { content_name: region });
     window.gtag?.('event', 'generate_lead', { region });
